@@ -1,0 +1,117 @@
+{% extends '@ExamFinal/default/layout.html.twig' %}
+
+{% block body %}
+    <div class="container sf2">
+        <div class="row ennonce">
+            <div class="row center-align line_divider">
+                <img src="{{ asset('bundles/examfinal/images/quidditch.png') }}" alt="quidditch">
+                <blockquote cite="https://fr.wikipedia.org/wiki/Quidditch">
+                    "Le quidditch est un sport fictif issu de la saga Harry Potter créé par J. K. Rowling. Chaque équipe possède sept joueurs chevauchant des balais volants. L'objectif étant de marquer plus de points que l'adversaire en marquant un maximum de buts et en attrapant une balle magique, le vif d'or. Un match peut durer des mois et comporte des risques mortels pour les joueurs."
+                </blockquote>
+            </div>
+            <div class="row">
+                <h3>Enoncé</h3>
+                <p>La première chose consciste à bien s'imprégnier des règles du Quidditch, c'est un sport national à ne pas prendre à la légère !!!</p>
+                <p>Lis bien les sites suivants</p>
+                <ul class="collection">
+                    <li class="collection-item">
+                        <a href="http://www.quidditch.fr/">Fédération française de Quidditch</a>
+                    </li>
+                    <li class="collection-item">
+                        <a href="http://www.encyclopedie-hp.org/monde-magique/quidditch/regles/">Règles du Quidditch</a>
+                    </li>
+                    <li class="collection-item">
+                        <a href="https://fr.wikipedia.org/wiki/Quidditch">Quidditch by Wikipedia</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="instruction left-align row">
+            <h4>ETAPE 1: Créer les équipes</h4>
+            <ol class="collection">
+                <li>
+                    <strong>Etre en capacité de créer des équipes avec 7 joueurs dans chaque équipe</strong>
+                    <ol>
+                        <li>Créer un bundle QuidditchBundle</li>
+                        <li>
+                            Créer deux entités et deux CRUD
+                            <ol>
+                                <li>Un pour les équipes chacune identifiée par un nom, un pays et des joueurs</li>
+                                <li>
+                                    Un pour les joueurs chacun identifiés par nom, expérience et âge
+                                    <ol>
+                                        <li>Exp: défini aléatoirement entre 20 et 80</li>
+                                        <li>Age: défini aléatoirement entre 18 et 30</li>
+                                        <li>Fatigue: défini aléatoirement entre 0 et 20</li>
+                                        <li>Indiquer pour chaque joueur son rôle (gardien, attrapeur, batteur, ou poursuiveur)</li>
+                                        <li><strong>BONUS: </strong>Upload d’une photo pour chaque joueur</li>
+                                        <li><strong>SUPER BONUS: </strong>le nom des joueurs sera généré automatiquement via l’api <a href="https://randomuser.me/" target="_blank">https://randomuser.me/</a></li>
+                                    </ol>
+                                </li>
+                            </ol>
+                        </li>
+                        <li>Un joueur ne peut pas être présent deux fois dans la même équipe, de même qu’un joueur ne peut pas être dans deux équipes différentes</li>
+                    </ol>
+                </li>
+                <li>
+                    <strong>BONUS</strong>
+                    <ol>
+                        <li>Ajouter les joueurs directement depuis une équipe via des CollectionType</li>
+                        <li>Message d’erreur si l’on tente d’ajouter plus de 7 joueur par équipe</li>
+                        <li>Il ne peut y avoir plus d’1 gardien, 1 attrapeur, 2 batteurs et  3 poursuiveurs par équipe</li>
+                    </ol>
+                </li>
+            </ol>
+            <h4>ETAPE 2: Faire jouer les équipes</h4>
+            <ol>
+                <li>On a un formulaire dans lequel on peut sélectionner deux équipes</li>
+                <li>
+                    Après validation, sur la vue suivante:
+                    <ol>
+                        <li>Renvoyer les statistiques globales des deux équipes (expérience total, moyenne d’âge, fatigue moyenne)</li>
+                        <li>
+                            Afficher l’équipe vainqueur selon les critères suivants:
+                            <ol>
+                                <li>
+                                    La note de l’équipe se calcule par la formule suivante :
+                                    <ol>
+                                        <li>moyenne de l’exp des joueurs * (moyenne_fatigue/100)</li>
+                                    </ol>
+                                </li>
+                                <li>L’équipe la plus jeune voit sa note bonifiée de 10%</li>
+                                <li>L’équipe qui a la note la plus haute gagne</li>
+                            </ol>
+                        </li>
+                    </ol>
+                </li>
+            </ol>
+            <h4>BONUS</h4>
+            <ol>
+                <li>Après chaque match, chaque joueur de l’équipe vainqueur se voit attribuer aléatoirement entre 5 et 10% d’exp supplémentaire, tandis que les perdants ne se voient attribuer qu’entre 0 et 5% d’exp supplémentaire</li>
+                <li>Prise en compte de la fatiguee: chaque match augmente la fatigue des joueurs aléatoirement de 1 à 10 points (on ne peut pas dépasser 80 de fatigue)</li>
+            </ol>
+            <h4>MAXI BONUS</h4>
+            <ol>
+                <li>
+                    Créer une page tournoi qui lancera automatiquement des matches entre 8 équipes configurées
+                    <ol>
+                        <li>Afficher sur une même page les résultats des quart de finale, demi finale, et finale (en prenant en compte les mêmes règles de calcul que précédemment pour déterminer les vainqueurs et l’évolution des statistiques)</li>
+                    </ol>
+                </li>
+            </ol>
+        </div>
+        <div class="row line_divider">
+            <p>Tu es libre d'utiliser le/les frameworks css/js de ton choix, aucune librairie n'est chargée</p>
+            <p>Tu peux également utiliser le fichier base.html.twig si tu en as besoin, tout le reste doit se trouver dans ton bundle</p>
+            <p>L'interface que tu vas créer devra être consultable par via le path "/quidditch"</p>
+            <p>Pour la suite je te laisse faire !</p>
+            <p>Bon courage</p>
+        </div>
+        <div class="row">
+            <div class="col m12 button_homepage">
+                <a href="{{ path('exam_final_homepage') }}" class="waves-effect waves-light btn">Retour à la page d'accueil</a>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
