@@ -1,0 +1,90 @@
+{% extends '@ExamFinal/default/layout.html.twig' %}
+
+{% block body %}
+
+    <div class="algo container">
+        <div class="row>">
+            <h1>Algorithmique</h1>
+            <p>Bienvenu sur le test d'algorithmique</p>
+            <p>Ci-dessous deux sujets d'algo</p>
+            <p>Ouvre le projet avec PHP Storm et rend toi dans le controlleur "AlgoController", c'est ici que tu devras travailler.</p>
+            <p>Tu n'as normalement rien à modifier dans les autres fichiers pour cette étape</p>
+            <p>Si ton algo est bon, les tests passent au vert.</p>
+            <p>Bon courage</p>
+        </div>
+
+        <div class="row">
+            <div class="row exo">
+                <div class="row ennoncé">
+                    <div class="row">
+                        <h3>Exercice 1</h3>
+                        <h5>Traduire un texte en javanais</h5>
+                        <p>Le javanais est un procédé de codage simple consistant à ajouter la syllabe 'av' devant chaque voyelle. Quelques règles supplémentaires s'appliquent, comme indiqué ci-dessous:</p>
+                    </div>
+                    <div class="row">
+                        <div class="col m8 offset-m2 left-align">
+                            <ul class="collection">
+                                <li class="collection-item">On n’ajoute pas “av” devant un e en fin de mot</li>
+                                <li class="collection-item">On ajoute bien “av” devant une voyelle en début de mot</li>
+                                <li class="collection-item">Si plusieurs voyelles se suivent, on n'ajoute “av” que devant la première</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <p>Par simplification, on s'assurera que la chaîne est traitée en minuscule, ainsi que la traduction attendue.</p>
+                        <p>Par simplification, les caractères accentués ne seront pas traités comme des voyelles
+                        </p>
+                    </div>
+                </div>
+                <div class="row exemples line_divider">
+                    <div class="col m6">
+                        <strong>Exemple 1 :</strong>
+                        <p><strong>Entrée :</strong> wild code school</p>
+                        <p><strong>Sortie:</strong> wavild cavode schavool</p>
+                    </div>
+                    <div class="col m6">
+                        <strong>Exemple 2 :</strong>
+                        <p><strong>Entrée :</strong> bonjour Amélie</p>
+                        <p><strong>Sortie:</strong> bavonjavour avamélavie</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <h5>Lancer les tests:</h5>
+                    <p>Dans le dossier de votre projet, via le terminal, exécuter la commande <span class="commande_style">phpunit tests/ExamFinalBundle/Controller/Exercice1ControllerTest.php</span></p>
+                </div>
+            </div>
+
+            <div class="exo row">
+                <div class="row ennoncé">
+                    <h3>Exercice 2</h3>
+                    <h5>Remplir une zone en 2 dimensions en laissant une marge</h5>
+                    <p><strong>En entrée: </strong> un tableau à 2 dimensions contenant des 0 et des 1. Les 0 représentent une zone qu’il faut ignorer. Les 1 représentent la zone géométrique à remplir avec des 2. Lors du remplissage, il faut toujours laisser une marge de 1.</p>
+                    <p><strong>En sortie,</strong> un tableau à 2 dimensions avec la zone géométrique identifiée par des 1 remplie de 2 avec une marge de 1.</p>
+                </div>
+                <div class="row exemples">
+                    <div class="row line_divider">
+                        <h5>Exemple</h5>
+                        <div class="col m6 center-align">
+                            <p><strong>Entrée: </strong></p>
+                            <img class="center-align" width="40%" src="{{ asset('bundles/examfinal/images/algo_2_entrée.png') }}" alt="">
+                        </div>
+                        <div class="col m6 center-align">
+                            <p><strong>Sortie: </strong></p>
+                            <img width="40%" src="{{ asset('bundles/examfinal/images/algo_2_sortie.png') }}" alt="">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <h5>Lancer les tests:</h5>
+                    <p>Dans le dossier de votre projet, via le terminal, exécuter la commande <span class="commande_style">phpunit tests/ExamFinalBundle/Controller/Exercice2ControllerTest.php</span></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="button_homepage">
+                <a href="{{ path('exam_final_homepage') }}" class="waves-effect waves-light btn">Retour à la page d'accueil</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

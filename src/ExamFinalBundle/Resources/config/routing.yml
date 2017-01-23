@@ -1,0 +1,11 @@
+exam_final_homepage:
+    path:     /
+    defaults: { _controller: ExamFinalBundle:Default:index }
+
+exam_final_algo:
+    path: /algo
+    defaults: { _controller: ExamFinalBundle:Default:algo }
+
+exam_final_sf2:
+    path: sf2
+    defaults: { _controller: ExamFinalBundle:Default:sf2 }
