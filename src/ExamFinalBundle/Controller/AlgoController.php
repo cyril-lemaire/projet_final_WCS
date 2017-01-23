@@ -13,7 +13,8 @@ class AlgoController extends Controller
     // Exercice 1
     public function traduire($string)
     {
-		return preg_replace("/([aiouy][aeiouy]*)|e[aeiouy]+|e(?!\s|$)/", "av$0", strtolower($string));
+    	return preg_replace("/[aiouy]([aeiouy]*)|e([aeiouy]+|\B)/", "av$0", strtolower($string));
+		//return preg_replace("/([aiouy][aeiouy]*)|e[aeiouy]+|e(?!\b)/", "av$0", strtolower($string));
     }
 
     // Exercice 2
@@ -33,7 +34,7 @@ class AlgoController extends Controller
     		return false;
     	for ($x1 = $x - 1; $x1 <= $x + 1; ++$x1)
 			for ($y1 = $y - 1; $y1 <= $y + 1; ++$y1)
-				if ($input[$y1][$x1] != "1" && $input[$y1][$x1] != "2")
+				if ($input[$y1][$x1] == "0")
 					return false;
     	return true;
 	}
