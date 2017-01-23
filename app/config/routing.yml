@@ -1,3 +1,7 @@
+quidditch:
+    resource: "@QuidditchBundle/Resources/config/routing.yml"
+    prefix:   /quidditch
+
 exam_final:
     resource: "@ExamFinalBundle/Resources/config/routing.yml"
     prefix:   /
