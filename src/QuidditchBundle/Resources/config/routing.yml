@@ -1,0 +1,19 @@
+quidditch_homepage:
+    path:     /
+    defaults: { _controller: QuidditchBundle:Default:index }
+
+quidditch_team:
+        resource: "@QuidditchBundle/Resources/config/routing/team.yml"
+        prefix:   /team
+
+quidditch_player:
+    resource: "@QuidditchBundle/Resources/config/routing/player.yml"
+    prefix:   /player
+
+quidditch_role:
+        resource: "@QuidditchBundle/Resources/config/routing/role.yml"
+        prefix:   /role
+
+quidditch_game:
+        resource: "@QuidditchBundle/Resources/config/routing/game.yml"
+        prefix:   /game

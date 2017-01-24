@@ -1,0 +1,36 @@
+QuidditchBundle\Entity\Game:
+    type: entity
+    table: null
+    repositoryClass: QuidditchBundle\Repository\GameRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        date:
+            type: datetime
+    manyToMany:
+        teams:
+            targetEntity: Team
+            inversedBy: playedGames
+            cascade: ['persist']
+            joinTable:
+                name: teams_games
+                joinColumns:
+                    game_id:
+                        referencedColumnName: id
+                inverseJoinColumns:
+                    team_id:
+                        referencedColumnName: id
+    manyToOne:
+        winner:
+            targetEntity: Team
+            cascade: ['persist']
+            inversedBy: wonGames
+            joinColumn:
+                name: team_id
+                referencedColumnName: id
+
+    lifecycleCallbacks: {  }

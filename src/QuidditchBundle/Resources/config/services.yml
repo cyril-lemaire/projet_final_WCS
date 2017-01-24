@@ -1,0 +1,4 @@
+services:
+#    quidditch.example:
+#        class: QuidditchBundle\Example
+#        arguments: ["@service_id", "plain_value", "%parameter%"]

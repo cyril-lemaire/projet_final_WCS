@@ -1,0 +1,33 @@
+QuidditchBundle\Entity\Team:
+    type: entity
+    table: null
+    repositoryClass: QuidditchBundle\Repository\TeamRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        name:
+            type: string
+            length: 255
+        country:
+            type: string
+            length: 255
+        dateFormation:
+            type: datetime
+    oneToMany:
+        players:
+            targetEntity: Player
+            mappedBy: team
+            cascade: ['persist']
+        wonGames:
+            targetEntity: Game
+            mappedBy: winner
+
+    manyToMany:
+        playedGames:
+          targetEntity: Game
+          mappedBy: teams
+    lifecycleCallbacks: {  }

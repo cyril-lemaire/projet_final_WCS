@@ -1,0 +1,24 @@
+game_new:
+    path:     /new
+    defaults: { _controller: "QuidditchBundle:Game:new" }
+    methods:  [GET, POST]
+
+game_show:
+    path:     /{id}/show
+    defaults: { _controller: "QuidditchBundle:Game:show" }
+    methods:  GET
+
+game_index:
+    path:     /
+    defaults: { _controller: "QuidditchBundle:Game:index" }
+    methods:  GET
+
+game_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "QuidditchBundle:Game:edit" }
+    methods:  [GET, POST]
+
+game_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "QuidditchBundle:Game:delete" }
+    methods:  DELETE

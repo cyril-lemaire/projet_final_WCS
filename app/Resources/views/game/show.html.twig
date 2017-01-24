@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Game</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Game ID:</th>
+                <td>{{ game.id }}</td>
+            </tr>
+            <tr>
+                <th>Date</th>
+                <td>{% if game.date %}{{ game.date|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Team 1</th>
+                <td>{{ game.teams[0] }}</td>
+            </tr>
+            <tr>
+                <th>Team 2</th>
+                <td>{{ game.teams[1] }}</td>
+            </tr>
+            <tr>
+                <th>Winner</th>
+                <td>{{ game.winner }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('game_index') }}">Back to the list</a>
+        </li>
+    </ul>
+{% endblock %}

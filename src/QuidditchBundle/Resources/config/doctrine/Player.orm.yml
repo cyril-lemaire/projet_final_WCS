@@ -1,0 +1,33 @@
+QuidditchBundle\Entity\Player:
+    type: entity
+    table: null
+    repositoryClass: QuidditchBundle\Repository\PlayerRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        name:
+            type: string
+            length: 255
+        exp:
+            type: integer
+        age:
+            type: integer
+        exhaust:
+            type: integer
+    manyToOne:
+        team:
+            targetEntity: Team
+            inversedBy: players
+            joinColumn:
+                name: team_id
+                referencedColumnName: id
+        role:
+            targetEntity: Role
+            joinColumn:
+                name: role_id
+                referencedColumnName: id
+    lifecycleCallbacks: {  }
