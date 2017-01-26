@@ -39,22 +39,26 @@ class Team
 	 */
 	public function addPlayer(\QuidditchBundle\Entity\Player $player)
 	{
-		if ($n = count($this->getPlayers()) >= array_sum(Team::MAX_PER_ROLE)) {
+		if (($n = count($this->getPlayers())) >= array_sum(Team::MAX_PER_ROLE)) {
 			echo "addPlayer: impossible operation, the team $this already contains $n players";
-		}
-		if (array_key_exists($roleName = strval($player->getRole()), Team::MAX_PER_ROLE)) {
-			$max = Team::MAX_PER_ROLE[$roleName];
+		} elseif ($player->getTeam() == $this) {
+			echo "addPlayer: impossible operation, the player $player is already in the team $this!";
+		} elseif (array_key_exists($roleName = strval($player->getRole()), Team::MAX_PER_ROLE)) {
+			if (($count = count($this->getPlayers($player->getRole()))) < Team::MAX_PER_ROLE[$roleName]) {
+				$this->players[] = $player;
+			} else {
+				echo "addPlayer: impossible operation, the player $player can't join the team $this because it already has $count $roleName!";
+			}
 		} else {
 			echo "Error! Role " . $roleName . " unknown!";
-			$max = 0;
 		}
-		if (count($this->getPlayers($player->getRole())) < $max)
-			$this->players[] = $player;
 		return $this;
 	}
 
 	/**
 	 * Get players
+	 *
+	 * @param \QuidditchBundle\Entity\Role|null $role
 	 *
 	 * @return \Doctrine\Common\Collections\Collection
 	 */
@@ -70,12 +74,36 @@ class Team
 		return $res;
 	}
 
+	/**
+	 * Set players
+	 *
+	 * @param array(Player) $players
+	 *
+	 * @return Team
+	 */
+	public function setPlayers(array $players)
+	{
+		$this->players = new \Doctrine\Common\Collections\ArrayCollection();
+		foreach ($this->getPlayers() as $player)
+			dump($player);
+		echo "removed all players! <br/>";
+		foreach ($players as $player) {
+			$this->addPlayer($player);
+		}/*
+		dump($this);
+		dump($players);
+		foreach ($this->getPlayers() as $p)
+			dump($p);
+		die();*/
+		return $this;
+	}
+
 	public function getAverageExhaust() {
 		$sum = 0;
 		foreach ($players = $this->getPlayers() as $player) {
 			$sum += $player->getExhaust();
 		}
-		return floatval($sum) / count($players);
+		return floatval($sum) / max(1, count($players));
 	}
 
 	public function getTotalExp() {
@@ -123,6 +151,30 @@ class Team
      */
     private $players;
 
+	/**
+	 * @var \Doctrine\Common\Collections\Collection
+	 */
+	private $games;
+
+	/**
+	 * @var \Doctrine\Common\Collections\Collection
+	 */
+	private $wonGames;
+
+	/**
+	 * @var \Doctrine\Common\Collections\Collection
+	 */
+	private $playedGames;
+
+	/**
+	 * Remove player
+	 *
+	 * @param \QuidditchBundle\Entity\Player $player
+	 */
+	public function removePlayer(\QuidditchBundle\Entity\Player $player)
+	{
+		$this->players->removeElement($player);
+	}
 
     /**
      * Get id
@@ -183,21 +235,6 @@ class Team
     }
 
     /**
-     * Remove player
-     *
-     * @param \QuidditchBundle\Entity\Player $player
-     */
-    public function removePlayer(\QuidditchBundle\Entity\Player $player)
-    {
-        $this->players->removeElement($player);
-    }
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $games;
-
-
-    /**
      * Add game
      *
      * @param \QuidditchBundle\Entity\Player $game
@@ -230,16 +267,6 @@ class Team
     {
         return $this->games;
     }
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $wonGames;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $playedGames;
-
 
     /**
      * Add wonGame

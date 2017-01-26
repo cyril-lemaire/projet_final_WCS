@@ -22,6 +22,7 @@ QuidditchBundle\Entity\Player:
         team:
             targetEntity: Team
             inversedBy: players
+            cascade: ['persist']
             joinColumn:
                 name: team_id
                 referencedColumnName: id

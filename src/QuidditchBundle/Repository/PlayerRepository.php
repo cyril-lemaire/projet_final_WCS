@@ -1,6 +1,8 @@
 <?php
 
 namespace QuidditchBundle\Repository;
+use QuidditchBundle\Entity\Role;
+use QuidditchBundle\Entity\Team;
 
 /**
  * PlayerRepository
@@ -10,4 +12,18 @@ namespace QuidditchBundle\Repository;
  */
 class PlayerRepository extends \Doctrine\ORM\EntityRepository
 {
+	public function findAllMappedByRole() {
+		// We're gonna save the players in an array of role
+		$playersByRole = [];
+		$roleNames = array_keys(Team::MAX_PER_ROLE);
+		foreach ($roleNames as $roleName) {
+			$role = $this->getEntityManager()->getRepository('QuidditchBundle:Role')->findOneBy(['name' => $roleName]);
+			$rawPlayers = $this->findByRole($role);
+			$playersByRole[$roleName] = [];
+			foreach ($rawPlayers as $player) {
+				$playersByRole[$roleName][strval($player)] = $player;
+			}
+		}
+		return $playersByRole;
+	}
 }

@@ -2,6 +2,7 @@
 
 namespace QuidditchBundle\Form;
 
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -13,7 +14,11 @@ class PlayerType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('name')->add('age')->add('team')->add('role');
+        $builder
+			->add('name')
+			->add('age')
+			->add('team')
+			->add('role');
     }
     
     /**

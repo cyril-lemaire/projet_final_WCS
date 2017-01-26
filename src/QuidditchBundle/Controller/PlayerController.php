@@ -41,7 +41,7 @@ class PlayerController extends Controller
             $em = $this->getDoctrine()->getManager();
             $player->setTeam($form->get('team')->getData());
             $em->persist($player);
-            $em->flush($player);
+            $em->flush();
 
             return $this->redirectToRoute('player_index');
         }
@@ -77,7 +77,9 @@ class PlayerController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+        	$em = $this->getDoctrine()->getManager();
+			$em->persist($player);
+			$em->flush();
 
             return $this->redirectToRoute('player_edit', array('id' => $player->getId()));
         }

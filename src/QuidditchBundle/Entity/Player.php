@@ -9,7 +9,7 @@ class Player
 {
 	public function __toString()
 	{
-		return $this->getName() . '( Role: ' . $this->getRole() . ')';
+		return $this->getName() . ' (Role: ' . $this->getRole() . ')';
 	}
 
 	/**
@@ -34,16 +34,8 @@ class Player
 		if ($this->getTeam() != null)
 			$this->getTeam()->removePlayer($this);
 		$this->team = null;
-
-		if ($team == null)
-			$this->team = $team;
-		else {
+		if ($team != null) {
 			$team->addPlayer($this);
-			foreach ($team->getPlayers() as $player) {
-				if ($this == $player) {
-					$this->team = $team;
-				}
-			}
 		}
 		return $this;
 	}

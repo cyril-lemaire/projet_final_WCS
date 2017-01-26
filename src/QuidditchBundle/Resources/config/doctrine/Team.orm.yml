@@ -20,8 +20,8 @@ QuidditchBundle\Entity\Team:
     oneToMany:
         players:
             targetEntity: Player
-            mappedBy: team
             cascade: ['persist']
+            mappedBy: team
         wonGames:
             targetEntity: Game
             mappedBy: winner

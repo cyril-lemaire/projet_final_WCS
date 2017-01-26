@@ -2,13 +2,10 @@
 
 namespace QuidditchBundle\Controller;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
-use QuidditchBundle\Entity\Player;
 use QuidditchBundle\Entity\Team;
-use QuidditchBundle\Form\PlayerType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -17,6 +14,45 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class TeamController extends Controller
 {
+	private function createTeamForm(Team $team) {
+		$em = $this->getDoctrine()->getManager();
+		$roles = $em->getRepository('QuidditchBundle:Player')->findAllMappedByRole();
+		$form = $this->createForm('QuidditchBundle\Form\TeamType', $team);
+		$playerIndex = 0;
+		foreach (array_keys(Team::MAX_PER_ROLE) as $roleName) {
+			$role = $em->getRepository('QuidditchBundle:Role')->findOneByName($roleName);
+			$teamPlayers = $team->getPlayers($role);
+
+			for ($i = 0; $i < Team::MAX_PER_ROLE[$roleName]; ++$i) {
+				$label = $role . (Team::MAX_PER_ROLE[$roleName] > 1 ? ' ' . strval($i + 1) : '');
+				$form->add('player' . $playerIndex++, EntityType::class, array(
+					'label' => $label,
+					'class' => 'QuidditchBundle:Player',
+					'choices' => $roles[$roleName],
+					'data' => $teamPlayers[$i],
+					'mapped' => false,
+				));
+			}
+		}
+		return $form;
+	}
+
+	private function validateTeamForm(&$form) {
+		$players = [];
+		for ($i = 0; $i < array_sum(Team::MAX_PER_ROLE); ++$i) {
+			$field = 'player' . $i;
+			$player = $form->get($field)->getData();
+			if (in_array($player, $players)) {
+				$isFormValid = false;
+				$form->get($field)->addError(new FormError('You cannot add this player in the team twice!'));
+				return false;
+			}
+			$players[] = $player;
+		}
+		$form->getData()->setPlayers($players);
+		return true;
+	}
+
     /**
      * Lists all team entities.
      *
@@ -39,15 +75,15 @@ class TeamController extends Controller
     public function newAction(Request $request)
     {
         $team = new Team();
-        $form = $this->createForm('QuidditchBundle\Form\TeamType', $team);
+        $form = $this->createTeamForm($team);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($team);
-            $em->flush($team);
+        if ($form->isSubmitted() && $form->isValid() && $this->validateTeamForm($form)) {
+			$em = $this->getDoctrine()->getManager();
+			$em->persist($team);
+			$em->flush();
 
-            return $this->redirectToRoute('team_show', array('id' => $team->getId()));
+			return $this->redirectToRoute('team_show', array('id' => $team->getId()));
         }
 
         return $this->render('team/new.html.twig', array(
@@ -63,6 +99,7 @@ class TeamController extends Controller
     public function showAction(Team $team)
     {
         $deleteForm = $this->createDeleteForm($team);
+
         return $this->render('team/show.html.twig', array(
             'team' => $team,
             'delete_form' => $deleteForm->createView(),
@@ -76,25 +113,19 @@ class TeamController extends Controller
     public function editAction(Request $request, Team $team)
     {
 		$em = $this->getDoctrine()->getManager();
-		$tmpPlayers = $em->getRepository('QuidditchBundle:Player')->findAll();
-		$players = [];
-		foreach ($tmpPlayers as $player)
-			$players[strval($player)] = $player;
-
         $deleteForm = $this->createDeleteForm($team);
-        $editForm = $this->createForm('QuidditchBundle\Form\TeamType', $team);
-        $editForm->add('players'/*, CollectionType::class, array(
-			'allow_add' => true,
-			'allow_delete' => true,
-			'entry_type' => Player::class,
-			'entry_options' => $players
-		)*/);
+        $editForm = $this->createTeamForm($team);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('team_edit', array('id' => $team->getId()));
+        	echo "Trying to validate the form!";
+			if ($this->validateTeamForm($editForm)) {
+				$em->persist($team);
+				foreach ($team->getPlayers() as $p)
+					$em->persist($p);
+				$em->flush();
+				return $this->redirectToRoute('team_show', array('id' => $team->getId()));
+			}
         }
 
         return $this->render('team/edit.html.twig', array(
@@ -116,7 +147,7 @@ class TeamController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->remove($team);
-            $em->flush($team);
+            $em->flush();
         }
 
         return $this->redirectToRoute('team_index');

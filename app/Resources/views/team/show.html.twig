@@ -17,6 +17,12 @@
                 <th>Country</th>
                 <td>{{ team.country }}</td>
             </tr>
+			{% for index, player in team.players %}
+                <tr>
+                    <th>Player {{ index + 1 }}</th>
+                    <td>{{ player }}</td>
+                </tr>
+            {% endfor %}
         </tbody>
     </table>
 
