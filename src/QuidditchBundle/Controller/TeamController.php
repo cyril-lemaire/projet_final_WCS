@@ -5,6 +5,7 @@ namespace QuidditchBundle\Controller;
 use QuidditchBundle\Entity\Team;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -14,21 +15,24 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class TeamController extends Controller
 {
-	private function createTeamForm(Team $team) {
+	/**
+	 * Generates a complete TeamForm for a Team (gathers all possible Players for each Role and defaults to the current's Team Players)
+	 * @param Team $team
+	 * @return Form
+	 */
+	private function createTeamForm(Team &$team) {
 		$em = $this->getDoctrine()->getManager();
-		$roles = $em->getRepository('QuidditchBundle:Player')->findAllMappedByRole();
 		$form = $this->createForm('QuidditchBundle\Form\TeamType', $team);
+		$roles = $em->getRepository('QuidditchBundle:Role')->findAll();
 		$playerIndex = 0;
-		foreach (array_keys(Team::MAX_PER_ROLE) as $roleName) {
-			$role = $em->getRepository('QuidditchBundle:Role')->findOneByName($roleName);
+		foreach ($roles as $role) {
 			$teamPlayers = $team->getPlayers($role);
-
-			for ($i = 0; $i < Team::MAX_PER_ROLE[$roleName]; ++$i) {
-				$label = $role . (Team::MAX_PER_ROLE[$roleName] > 1 ? ' ' . strval($i + 1) : '');
+			for ($i = 0; $i < $role->getMaxPerTeam(); ++$i) {
+				$label = $role . ($role->getMaxPerTeam() > 1 ? ' ' . strval($i + 1) : '');
 				$form->add('player' . $playerIndex++, EntityType::class, array(
 					'label' => $label,
 					'class' => 'QuidditchBundle:Player',
-					'choices' => $roles[$roleName],
+					'choices' => $em->getRepository('QuidditchBundle:Player')->findByRole($role),
 					'data' => $teamPlayers[$i],
 					'mapped' => false,
 				));
@@ -37,14 +41,23 @@ class TeamController extends Controller
 		return $form;
 	}
 
-	private function validateTeamForm(&$form) {
+	/**
+	 * Generates FormErrors if any and returns true if no error was found (false otherwise)
+	 * @param Form $form
+	 * @return bool isValid
+	 */
+	private function validateTeamForm(Form &$form) {
 		$players = [];
-		for ($i = 0; $i < array_sum(Team::MAX_PER_ROLE); ++$i) {
+		$roles = $this->getDoctrine()->getManager()->getRepository('QuidditchBundle:Role')->findAll();
+		$maxPlayersPerTeam = 0;
+		foreach ($roles as $role) {
+			$maxPlayersPerTeam += $role->getMaxPerTeam();
+		}
+		for ($i = 0; $i < $maxPlayersPerTeam; ++$i) {
 			$field = 'player' . $i;
 			$player = $form->get($field)->getData();
 			if (in_array($player, $players)) {
-				$isFormValid = false;
-				$form->get($field)->addError(new FormError('You cannot add this player in the team twice!'));
+				$form->addError(new FormError('You cannot add the player ' . $player . ' twice!'));
 				return false;
 			}
 			$players[] = $player;
@@ -63,7 +76,7 @@ class TeamController extends Controller
 
         $teams = $em->getRepository('QuidditchBundle:Team')->findAll();
 
-        return $this->render('team/index.html.twig', array(
+        return $this->render('QuidditchBundle:team:index.html.twig', array(
             'teams' => $teams,
         ));
     }
@@ -86,11 +99,26 @@ class TeamController extends Controller
 			return $this->redirectToRoute('team_show', array('id' => $team->getId()));
         }
 
-        return $this->render('team/new.html.twig', array(
+        return $this->render('QuidditchBundle:team:new.html.twig', array(
             'team' => $team,
             'form' => $form->createView(),
         ));
     }
+
+	/**
+	 * Creates a new team entity.
+	 *
+	 */
+	public function autocreateAction()
+	{
+		$em = $this->getDoctrine()->getManager();
+		$team = $this->get('auto.create')->createTeam();
+
+		$em->persist($team);
+		$em->flush();
+
+		return $this->redirectToRoute('team_show', array('id' => $team->getId()));
+	}
 
     /**
      * Finds and displays a team entity.
@@ -100,7 +128,7 @@ class TeamController extends Controller
     {
         $deleteForm = $this->createDeleteForm($team);
 
-        return $this->render('team/show.html.twig', array(
+        return $this->render('QuidditchBundle:team:show.html.twig', array(
             'team' => $team,
             'delete_form' => $deleteForm->createView(),
         ));
@@ -128,7 +156,7 @@ class TeamController extends Controller
 			}
         }
 
-        return $this->render('team/edit.html.twig', array(
+        return $this->render('QuidditchBundle:team:edit.html.twig', array(
             'team' => $team,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),

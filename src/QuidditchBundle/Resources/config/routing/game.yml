@@ -13,11 +13,6 @@ game_index:
     defaults: { _controller: "QuidditchBundle:Game:index" }
     methods:  GET
 
-game_edit:
-    path:     /{id}/edit
-    defaults: { _controller: "QuidditchBundle:Game:edit" }
-    methods:  [GET, POST]
-
 game_delete:
     path:     /{id}/delete
     defaults: { _controller: "QuidditchBundle:Game:delete" }

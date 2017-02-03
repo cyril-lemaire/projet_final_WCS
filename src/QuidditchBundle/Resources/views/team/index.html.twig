@@ -39,7 +39,14 @@
 
     <ul>
         <li>
-            <a href="{{ path('team_new') }}">Create a new team</a>
+            <a href="{{ path('team_new') }}">
+                <button>Create a new team</button>
+            </a>
+        </li>
+        <li>
+            <a href="{{ path('team_autocreate') }}">
+                <button>Generate a new team automatically</button>
+            </a>
         </li>
     </ul>
 {% endblock %}

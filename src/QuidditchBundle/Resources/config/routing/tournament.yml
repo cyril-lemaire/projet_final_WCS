@@ -1,0 +1,19 @@
+tournament_index:
+    path:     /
+    defaults: { _controller: "QuidditchBundle:Tournament:index" }
+    methods:  GET
+
+tournament_show:
+    path:     /{id}/show
+    defaults: { _controller: "QuidditchBundle:Tournament:show" }
+    methods:  GET
+
+tournament_new:
+    path:     /new
+    defaults: { _controller: "QuidditchBundle:Tournament:new" }
+    methods:  [GET, POST]
+
+tournament_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "QuidditchBundle:Tournament:delete" }
+    methods:  DELETE

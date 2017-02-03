@@ -1,28 +1,30 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Games list</h1>
+    <h1>Roles list</h1>
 
     <table>
         <thead>
             <tr>
                 <th>Id</th>
-                <th>Date</th>
+                <th>Name</th>
+                <th>Max per Team</th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
-        {% for game in games %}
+        {% for role in roles %}
             <tr>
-                <td><a href="{{ path('game_show', { 'id': game.id }) }}">{{ game.id }}</a></td>
-                <td>{% if game.date %}{{ game.date|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td><a href="{{ path('role_show', { 'id': role.id }) }}">{{ role.id }}</a></td>
+                <td>{{ role.name }}</td>
+                <td>{{ role.maxPerTeam }}</td>
                 <td>
                     <ul>
                         <li>
-                            <a href="{{ path('game_show', { 'id': game.id }) }}">show</a>
+                            <a href="{{ path('role_show', { 'id': role.id }) }}">show</a>
                         </li>
                         <li>
-                            <a href="{{ path('game_edit', { 'id': game.id }) }}">edit</a>
+                            <a href="{{ path('role_edit', { 'id': role.id }) }}">edit</a>
                         </li>
                     </ul>
                 </td>
@@ -33,7 +35,7 @@
 
     <ul>
         <li>
-            <a href="{{ path('game_new') }}">Create a new game</a>
+            <a href="{{ path('role_new') }}">Create a new role</a>
         </li>
     </ul>
 {% endblock %}

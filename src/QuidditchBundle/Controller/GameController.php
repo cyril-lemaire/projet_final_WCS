@@ -4,6 +4,7 @@ namespace QuidditchBundle\Controller;
 
 use QuidditchBundle\Entity\Game;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -24,16 +25,20 @@ class GameController extends Controller
 		$form = $this->createForm('QuidditchBundle\Form\GameType', $game);
 		$form->handleRequest($request);
 
-		if ($form->isSubmitted() && $form->isValid() && count($game->getTeams()) == 2) {
-			$em = $this->getDoctrine()->getManager();
-			$game->play();
-			$em->persist($game);
-			$em->flush();
+		if ($form->isSubmitted() && $form->isValid()) {
+			$game->addTeam($form->get('team_1')->getData())->addTeam($form->get('team_2')->getData());
+			if ($game->getTeams()[0] != $game->getTeams()[1]) {
+				$em = $this->getDoctrine()->getManager();
+				$game->play();
+				$em->persist($game);
+				$em->flush();
 
-			return $this->redirectToRoute('game_show', array('id' => $game->getId()));
+				return $this->redirectToRoute('game_show', array('id' => $game->getId()));
+			}
+			$form->addError(new FormError("The two teams must be different!"));
 		}
 
-		return $this->render('game/new.html.twig', array(
+		return $this->render('QuidditchBundle:game:new.html.twig', array(
 			'game' => $game,
 			'form' => $form->createView(),
 		));
@@ -45,7 +50,7 @@ class GameController extends Controller
 	 */
 	public function showAction(Game $game)
 	{
-		return $this->render('game/show.html.twig', array(
+		return $this->render('QuidditchBundle:game:show.html.twig', array(
 			'game' => $game,
 		));
 	}
@@ -60,31 +65,8 @@ class GameController extends Controller
 
         $games = $em->getRepository('QuidditchBundle:Game')->findAll();
 
-        return $this->render('game/index.html.twig', array(
+        return $this->render('QuidditchBundle:game:index.html.twig', array(
             'games' => $games,
-        ));
-    }
-
-    /**
-     * Displays a form to edit an existing game entity.
-     *
-     */
-    public function editAction(Request $request, Game $game)
-    {
-        $deleteForm = $this->createDeleteForm($game);
-        $editForm = $this->createForm('QuidditchBundle\Form\GameType', $game);
-        $editForm->handleRequest($request);
-
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('game_edit', array('id' => $game->getId()));
-        }
-
-        return $this->render('game/edit.html.twig', array(
-            'game' => $game,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
         ));
     }
 

@@ -9,6 +9,11 @@ use Symfony\Component\Validator\Constraints\DateTime;
  */
 class Game
 {
+	public function __toString()
+	{
+		return $this->getTeams()[0] . ' Vs ' . $this->getTeams()[1] . "Winner: " . $this->getWinner();
+	}
+
 	/**
 	 * Définir l’équipe vainqueur selon les critères suivants:
 	 * La note de l’équipe se calcule par la formule suivante :
@@ -28,24 +33,28 @@ class Game
 			}
 		}
 		$score[$youngestTeam] *= 1.1;
-		if ($score[0] == $score[1])
+		if ($score[0] == $score[1]) {
 			$this->setWinner($this->getTeams()[random_int(0, 1)]);
-		else
+		} else {
 			$this->setWinner($this->getTeams()[$score[1] > $score[0]]);
+		}
 		$this->getWinner()->gainExp(5, 10);
 		$this->getLoser()->gainExp(0, 5);
-		foreach ($this->getTeams() as $team)
+		foreach ($this->getTeams() as $team) {
 			$team->addExhaust(1, 10);
-
+		}
 		return $this;
 	}
 
 	/**
 	 * Constructor
 	 */
-	public function __construct()
+	public function __construct(Team $team1 = null, Team $team2 = null)
 	{
 		$this->teams = new \Doctrine\Common\Collections\ArrayCollection();
+		if ($team1 && $team2) {
+			$this->addTeam($team1)->addTeam($team2);
+		}
 		$this->date = new \DateTime('now');
 	}
 
@@ -56,9 +65,11 @@ class Game
 	 */
 	public function getLoser()
 	{
-		foreach ($this->getTeams() as $team)
-			if ($team != $this->getWinner())
+		foreach ($this->getTeams() as $team) {
+			if ($team != $this->getWinner()) {
 				return $team;
+			}
+		}
 	}
 
 	////////////////////

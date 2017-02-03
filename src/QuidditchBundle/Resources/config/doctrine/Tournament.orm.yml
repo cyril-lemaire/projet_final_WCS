@@ -1,0 +1,32 @@
+QuidditchBundle\Entity\Tournament:
+    type: entity
+    table: null
+    repositoryClass: QuidditchBundle\Repository\TournamentRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        date:
+            type: datetime
+        nbTeams:
+            type: integer
+
+    # Unidirectional One To Many
+    manyToMany:
+        games:
+            targetEntity: Game
+            cascade: ['persist']
+            joinTable:
+                name: tournaments_games
+                joinColumns:
+                    tournament_id:
+                        referencedColumnName: id
+                inverseJoinColumns:
+                    game_id:
+                        referencedColumnName: id
+                        unique: true
+
+    lifecycleCallbacks: {  }

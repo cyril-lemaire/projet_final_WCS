@@ -17,3 +17,7 @@ quidditch_role:
 quidditch_game:
         resource: "@QuidditchBundle/Resources/config/routing/game.yml"
         prefix:   /game
+
+quidditch_tournament:
+        resource: "@QuidditchBundle/Resources/config/routing/tournament.yml"
+        prefix:   /tournament

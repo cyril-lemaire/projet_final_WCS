@@ -9,13 +9,6 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class Team
 {
-	const MAX_PER_ROLE = [
-		'Chaser' => 3,
-		'Beater' => 2,
-		'Keeper' => 1,
-		'Seeker' => 1,
-	];
-
 	/**
 	 * Constructor
 	 */
@@ -39,18 +32,12 @@ class Team
 	 */
 	public function addPlayer(\QuidditchBundle\Entity\Player $player)
 	{
-		if (($n = count($this->getPlayers())) >= array_sum(Team::MAX_PER_ROLE)) {
-			echo "addPlayer: impossible operation, the team $this already contains $n players";
-		} elseif ($player->getTeam() == $this) {
+		if ($player->getTeam() == $this) {
 			echo "addPlayer: impossible operation, the player $player is already in the team $this!";
-		} elseif (array_key_exists($roleName = strval($player->getRole()), Team::MAX_PER_ROLE)) {
-			if (($count = count($this->getPlayers($player->getRole()))) < Team::MAX_PER_ROLE[$roleName]) {
-				$this->players[] = $player;
-			} else {
-				echo "addPlayer: impossible operation, the player $player can't join the team $this because it already has $count $roleName!";
-			}
+		} elseif (($count = count($this->getPlayers($role = $player->getRole()))) < $role->getMaxPerTeam()) {
+			$this->players[] = $player->_setTeamWithNoCheck($this);
 		} else {
-			echo "Error! Role " . $roleName . " unknown!";
+			echo "addPlayer: impossible operation, the player $player can't join the team $this because it already has $count " . $role->getName(). "s!";
 		}
 		return $this;
 	}
@@ -96,6 +83,16 @@ class Team
 			dump($p);
 		die();*/
 		return $this;
+	}
+
+	/**
+	 * Remove player
+	 *
+	 * @param \QuidditchBundle\Entity\Player $player
+	 */
+	public function removePlayer(\QuidditchBundle\Entity\Player $player)
+	{
+		$this->players->removeElement($player->_setTeamWithNoCheck(null));
 	}
 
 	public function getAverageExhaust() {
@@ -165,16 +162,6 @@ class Team
 	 * @var \Doctrine\Common\Collections\Collection
 	 */
 	private $playedGames;
-
-	/**
-	 * Remove player
-	 *
-	 * @param \QuidditchBundle\Entity\Player $player
-	 */
-	public function removePlayer(\QuidditchBundle\Entity\Player $player)
-	{
-		$this->players->removeElement($player);
-	}
 
     /**
      * Get id

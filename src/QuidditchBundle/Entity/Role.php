@@ -60,4 +60,33 @@ class Role
     {
         return $this->name;
     }
+    /**
+     * @var integer
+     */
+    private $maxPerTeam;
+
+
+    /**
+     * Set maxPerTeam
+     *
+     * @param integer $maxPerTeam
+     *
+     * @return Role
+     */
+    public function setMaxPerTeam($maxPerTeam)
+    {
+        $this->maxPerTeam = $maxPerTeam;
+
+        return $this;
+    }
+
+    /**
+     * Get maxPerTeam
+     *
+     * @return integer
+     */
+    public function getMaxPerTeam()
+    {
+        return $this->maxPerTeam;
+    }
 }

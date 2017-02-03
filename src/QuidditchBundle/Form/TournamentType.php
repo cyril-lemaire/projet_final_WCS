@@ -6,7 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class RoleType extends AbstractType
+class TournamentType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -14,8 +14,8 @@ class RoleType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-			->add('name')
-			->add('maxPerTeam')
+			->add('date')
+			->add('nbTeams')
 		;
     }
     
@@ -25,7 +25,7 @@ class RoleType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'QuidditchBundle\Entity\Role'
+            'data_class' => 'QuidditchBundle\Entity\Tournament'
         ));
     }
 
@@ -34,7 +34,7 @@ class RoleType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'quidditchbundle_role';
+        return 'quidditchbundle_tournament';
     }
 
 

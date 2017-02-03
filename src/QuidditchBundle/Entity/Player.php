@@ -41,6 +41,20 @@ class Player
 	}
 
 	/**
+	 * Set team, DOES NOT MAKE ANY CHECK FOR VALIDITY
+	 *
+	 * @param \QuidditchBundle\Entity\Team $team
+	 *
+	 * @return Player
+	 */
+	public function _setTeamWithNoCheck(\QuidditchBundle\Entity\Team $team = null)
+	{
+		$this->team = $team;
+
+		return $this;
+	}
+
+	/**
 	 * Add exp
 	 *
 	 * @param integer $exp
@@ -117,7 +131,7 @@ class Player
      */
     public function setName($name)
     {
-        $this->name = $name;
+		$this->name = ucwords(strtolower($name));
 
         return $this;
     }

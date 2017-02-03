@@ -3,6 +3,7 @@
 namespace QuidditchBundle\Controller;
 
 use QuidditchBundle\Entity\Player;
+use QuidditchBundle\Entity\Role;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -22,7 +23,7 @@ class PlayerController extends Controller
 
         $players = $em->getRepository('QuidditchBundle:Player')->findAll();
 
-        return $this->render('player/index.html.twig', array(
+        return $this->render('QuidditchBundle:player:index.html.twig', array(
             'players' => $players,
         ));
     }
@@ -46,7 +47,7 @@ class PlayerController extends Controller
             return $this->redirectToRoute('player_index');
         }
 
-        return $this->render('player/new.html.twig', array(
+        return $this->render('QuidditchBundle:player:new.html.twig', array(
             'player' => $player,
             'form' => $form->createView(),
         ));
@@ -60,7 +61,7 @@ class PlayerController extends Controller
     {
         $deleteForm = $this->createDeleteForm($player);
 
-        return $this->render('player/show.html.twig', array(
+        return $this->render('QuidditchBundle:player:show.html.twig', array(
             'player' => $player,
             'delete_form' => $deleteForm->createView(),
         ));
@@ -84,7 +85,7 @@ class PlayerController extends Controller
             return $this->redirectToRoute('player_edit', array('id' => $player->getId()));
         }
 
-        return $this->render('player/edit.html.twig', array(
+        return $this->render('QuidditchBundle:player:edit.html.twig', array(
             'player' => $player,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),

@@ -2,6 +2,7 @@
 
 namespace QuidditchBundle\Form;
 
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -13,7 +14,17 @@ class GameType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('date')->add('teams');
+        $builder
+			->add('date')
+			->add('team_1', EntityType::class, array(
+				'class' => 'QuidditchBundle:Team',
+				'mapped' => false,
+			))
+			->add('team_2', EntityType::class, array(
+				'class' => 'QuidditchBundle:Team',
+				'mapped' => false,
+			))
+		;
     }
     
     /**

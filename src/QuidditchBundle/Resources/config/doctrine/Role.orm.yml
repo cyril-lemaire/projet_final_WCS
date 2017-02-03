@@ -12,4 +12,6 @@ QuidditchBundle\Entity\Role:
         name:
             type: string
             length: 255
+        maxPerTeam:
+            type: integer
     lifecycleCallbacks: {  }

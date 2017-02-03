@@ -22,7 +22,7 @@ class RoleController extends Controller
 
         $roles = $em->getRepository('QuidditchBundle:Role')->findAll();
 
-        return $this->render('role/index.html.twig', array(
+        return $this->render('QuidditchBundle:role:index.html.twig', array(
             'roles' => $roles,
         ));
     }
@@ -45,7 +45,7 @@ class RoleController extends Controller
             return $this->redirectToRoute('role_show', array('id' => $role->getId()));
         }
 
-        return $this->render('role/new.html.twig', array(
+        return $this->render('QuidditchBundle:role:new.html.twig', array(
             'role' => $role,
             'form' => $form->createView(),
         ));
@@ -59,7 +59,7 @@ class RoleController extends Controller
     {
         $deleteForm = $this->createDeleteForm($role);
 
-        return $this->render('role/show.html.twig', array(
+        return $this->render('QuidditchBundle:role:show.html.twig', array(
             'role' => $role,
             'delete_form' => $deleteForm->createView(),
         ));
@@ -81,7 +81,7 @@ class RoleController extends Controller
             return $this->redirectToRoute('role_edit', array('id' => $role->getId()));
         }
 
-        return $this->render('role/edit.html.twig', array(
+        return $this->render('QuidditchBundle:role:edit.html.twig', array(
             'role' => $role,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
@@ -100,7 +100,7 @@ class RoleController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->remove($role);
-            $em->flush($role);
+            $em->flush();
         }
 
         return $this->redirectToRoute('role_index');
