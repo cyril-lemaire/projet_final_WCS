@@ -20,9 +20,11 @@ class autoCreate extends Controller
 	 * Creates a new player entity with random values (no form).
 	 *
 	 */
-	public function createPlayer(Role $role) {
+	public function createPlayer(Role $role, $randomUser = null) {
 		$player = new Player();
-		$randomUser = json_decode(file_get_contents("https://randomuser.me/api/"))->results[0];
+		if (!$randomUser) {
+			$randomUser = json_decode(file_get_contents("https://randomuser.me/api/"))->results[0];
+		}
 		$player
 			->setRole($role)
 			->setName($randomUser->name->first . " " . $randomUser->name->last)
@@ -35,20 +37,30 @@ class autoCreate extends Controller
 	 * Creates a new player entity with random values (no form).
 	 *
 	 */
-	public function createTeam() {
+	public function createTeam($randomUsers = null, &$roles = null) {
 		$em = $this->getDoctrine()->getManager();
-		$roles = $em->getRepository('QuidditchBundle:Role')->findAll();
-		$randomUser = json_decode(file_get_contents("https://randomuser.me/api/"))->results[0];
-		$teamName = $randomUser->login->username;
-		$teamCountry = $randomUser->location->state;
+		if (!$roles) {
+			$roles = $em->getRepository('QuidditchBundle:Role')->findAll();
+		}
+		if (!$randomUsers) {
+			$playersPerTeam = 0;
+			foreach ($roles as $role) {
+				$playersPerTeam += $role->getMaxPerTeam();
+			}
+			$randomUsers = json_decode(file_get_contents('https://randomuser.me/api/?results=' . ($playersPerTeam + 1)))->results;
+		}
+		$i = 0;
+		$teamUser = $randomUsers[$i++];
+		$teamName = $teamUser->login->username;
+		$teamCountry = $teamUser->location->state;
 		$team = new Team();
 		$team
 			->setName($teamName)
 			->setCountry($teamCountry)
 		;
 		foreach ($roles as $role) {
-			for ($i = 0; $i < $role->getMaxPerTeam(); ++$i) {
-				$team->addPlayer($this->createPlayer($role));
+			for ($j = 0; $j < $role->getMaxPerTeam(); ++$j) {
+				$team->addPlayer($this->createPlayer($role, $randomUsers[$i++]));
 			}
 		}
 

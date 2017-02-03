@@ -2,20 +2,13 @@
 
 {% block body %}
     <h1>Tournament</h1>
+    <h4><td>{% if tournament.date %}{{ tournament.date|date('Y-m-d H:i:s') }}{% endif %}</td></h4>
     <table>
         <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ tournament.id }}</td>
-            </tr>
-            <tr>
-                <th>Date</th>
-                <td>{% if tournament.date %}{{ tournament.date|date('Y-m-d H:i:s') }}{% endif %}</td>
-            </tr>
             {% for b, bracket in brackets %}
                 <tr>
                     <th>
-                        <h3>
+                        <h2>
                             {%  if loop.index < loop.length - 2%}
                                 Bracket {{ b + 1 }}
                             {% elseif loop.index == loop.length - 2 %}
@@ -25,8 +18,13 @@
 							{% elseif loop.index == loop.length %}
                                 Great Final
                             {% endif %}
-                        </h3>
+                        </h2>
                     </th>
+                <tr>
+                    <td colspan="5">
+                        <hr>
+                    </td>
+                </tr>
                 {% for g, game in bracket %}
                     <tr>
                         <td>
@@ -35,13 +33,13 @@
                     </tr>
                     <tr>
                         <td>Vs</td>
-                        <td><strong>{{ game.winner }}</strong></td>
+                        <td>Winner: <strong>{{ game.winner }}</strong></td>
                     </tr>
                     <tr>
                         <td> {{ game.teams[1] }} </td>
                     </tr>
                     <tr>
-                        <td>
+                        <td colspan="5">
                             <hr>
                         </td>
                     </tr>

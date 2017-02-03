@@ -51,9 +51,23 @@ class TournamentController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
 			if ($this->isPowerOfTwo($tournament->getNbTeams())) {
+				$em = $this->getDoctrine()->getManager();
+
+				$roles = $em->getRepository('QuidditchBundle:Role')->findAll();
+				$playersPerTeam = 0;
+				foreach ($roles as $role) {
+					$playersPerTeam += $role->getMaxPerTeam();
+				}
+				$randomUsers = json_decode(file_get_contents(
+					'https://randomuser.me/api/?results=' . (($playersPerTeam + 1) * $tournament->getNbTeams())
+				))->results;
+
 				$bracket = [];
 				for ($i = 0; $i < $tournament->getNbTeams(); ++$i) {
-					$bracket[] = $this->get('auto.create')->createTeam();
+					$bracket[] = $this->get('auto.create')->createTeam(
+						array_slice($randomUsers, $i * ($playersPerTeam + 1), $playersPerTeam + 1),
+						$roles
+					);
 				}
 				while (count($bracket) > 1) {
 					$prevBracket = $bracket;
@@ -66,7 +80,6 @@ class TournamentController extends Controller
 						$tournament->addGame($game);
 					}
 				}
-				$em = $this->getDoctrine()->getManager();
 				$em->persist($tournament);
 				$em->flush();
 
