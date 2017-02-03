@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Tournament</h1>
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ tournament.id }}</td>
+            </tr>
+            <tr>
+                <th>Date</th>
+                <td>{% if tournament.date %}{{ tournament.date|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+            {% for b, bracket in brackets %}
+                <tr>
+                    <th>
+                        <h3>
+                            {%  if loop.index < loop.length - 2%}
+                                Bracket {{ b + 1 }}
+                            {% elseif loop.index == loop.length - 2 %}
+                                Quarterfinals
+							{% elseif loop.index == loop.length - 1 %}
+                                Semifinals
+							{% elseif loop.index == loop.length %}
+                                Great Final
+                            {% endif %}
+                        </h3>
+                    </th>
+                {% for g, game in bracket %}
+                    <tr>
+                        <td>
+                            {{ game.teams[0] }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Vs</td>
+                        <td><strong>{{ game.winner }}</strong></td>
+                    </tr>
+                    <tr>
+                        <td> {{ game.teams[1] }} </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <hr>
+                        </td>
+                    </tr>
+                {% endfor %}
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <h1>Winner: {{ tournament.games|last.winner }} </h1>
+
+    <ul>
+        <li>
+            <a href="{{ path('tournament_index') }}">Back to the list</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}
