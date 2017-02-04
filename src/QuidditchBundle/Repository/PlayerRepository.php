@@ -1,6 +1,8 @@
 <?php
 
 namespace QuidditchBundle\Repository;
+use QuidditchBundle\Controller\PlayerController;
+use QuidditchBundle\Entity\Player;
 use QuidditchBundle\Entity\Role;
 use QuidditchBundle\Entity\Team;
 
@@ -12,6 +14,15 @@ use QuidditchBundle\Entity\Team;
  */
 class PlayerRepository extends \Doctrine\ORM\EntityRepository
 {
+	public function findByPage($page) {
+		$qb = $this->createQueryBuilder('p')
+			->setFirstResult(max(0, $page - 1) * PlayerController::ITEMS_PER_PAGE)
+			->setMaxResults(PlayerController::ITEMS_PER_PAGE)
+		;
+		return $qb->getQuery()->getResult();
+	}
+
+	/*
 	public function findAllMappedByRole() {
 		// We're gonna save the players in an array of role
 		$playersByRole = [];
@@ -26,4 +37,5 @@ class PlayerRepository extends \Doctrine\ORM\EntityRepository
 		}
 		return $playersByRole;
 	}
+	*/
 }

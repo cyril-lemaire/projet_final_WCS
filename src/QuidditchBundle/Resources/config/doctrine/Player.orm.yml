@@ -31,4 +31,5 @@ QuidditchBundle\Entity\Player:
             joinColumn:
                 name: role_id
                 referencedColumnName: id
+                nullable: false
     lifecycleCallbacks: {  }

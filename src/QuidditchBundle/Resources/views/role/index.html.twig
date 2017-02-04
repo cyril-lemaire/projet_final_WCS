@@ -3,6 +3,12 @@
 {% block body %}
     <h1>Roles list</h1>
 
+    <ul>
+        <li>
+            <a href="{{ path('role_new') }}">Create a new role</a>
+        </li>
+    </ul>
+
     <table>
         <thead>
             <tr>
@@ -33,9 +39,4 @@
         </tbody>
     </table>
 
-    <ul>
-        <li>
-            <a href="{{ path('role_new') }}">Create a new role</a>
-        </li>
-    </ul>
 {% endblock %}

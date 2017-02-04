@@ -1,4 +1,4 @@
-{% extends '@ExamFinal/default/layout.html.twig' %}
+{% extends 'ExamFinal:default:layout.html.twig' %}
 
 {% block body %}
 
@@ -33,5 +33,5 @@
         </div>
     </div>
 
-    <a href="{{ path("quidditch_homepage") }}"><button>Quidditch!</button></a>
+    <a class="waves-effect waves-light btn" href="{{ path("quidditch_homepage") }}">Quidditch!</a>
 {% endblock %}

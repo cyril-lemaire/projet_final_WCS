@@ -37,7 +37,7 @@ class Team
 		} elseif (($count = count($this->getPlayers($role = $player->getRole()))) < $role->getMaxPerTeam()) {
 			$this->players[] = $player->_setTeamWithNoCheck($this);
 		} else {
-			echo "addPlayer: impossible operation, the player $player can't join the team $this because it already has $count " . $role->getName(). "s!";
+			echo "addPlayer: impossible operation, the player $player can't join the team $this because it already has $count $role" . 's!';
 		}
 		return $this;
 	}

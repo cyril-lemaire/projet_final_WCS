@@ -58,14 +58,14 @@ class TournamentController extends Controller
 				foreach ($roles as $role) {
 					$playersPerTeam += $role->getMaxPerTeam();
 				}
-				$randomUsers = json_decode(file_get_contents(
-					'https://randomuser.me/api/?results=' . (($playersPerTeam + 1) * $tournament->getNbTeams())
-				))->results;
+				$nbPlayers = ($playersPerTeam + 1) * $tournament->getNbTeams();
+				$randomUsers = json_decode(file_get_contents('https://randomuser.me/api/?results=' . $nbPlayers))->results;
 
 				$bracket = [];
 				for ($i = 0; $i < $tournament->getNbTeams(); ++$i) {
 					$bracket[] = $this->get('auto.create')->createTeam(
-						array_slice($randomUsers, $i * ($playersPerTeam + 1), $playersPerTeam + 1),
+						$randomUsers,
+						$i * ($playersPerTeam + 1),
 						$roles
 					);
 				}

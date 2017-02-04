@@ -3,6 +3,19 @@
 {% block body %}
     <h1>Teams list</h1>
 
+    <ul>
+        <li>
+            <a href="{{ path('team_new') }}">
+                <button>Create a new team</button>
+            </a>
+        </li>
+        <li>
+            <a href="{{ path('team_autocreate') }}">
+                <button>Generate a new team automatically</button>
+            </a>
+        </li>
+    </ul>
+
     <table>
         <thead>
             <tr>
@@ -37,16 +50,4 @@
         </tbody>
     </table>
 
-    <ul>
-        <li>
-            <a href="{{ path('team_new') }}">
-                <button>Create a new team</button>
-            </a>
-        </li>
-        <li>
-            <a href="{{ path('team_autocreate') }}">
-                <button>Generate a new team automatically</button>
-            </a>
-        </li>
-    </ul>
 {% endblock %}

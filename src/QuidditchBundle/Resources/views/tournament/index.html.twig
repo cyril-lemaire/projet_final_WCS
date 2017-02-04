@@ -2,6 +2,11 @@
 
 {% block body %}
     <h1>Tournaments list</h1>
+    <ul>
+        <li>
+            <a href="{{ path('tournament_new') }}">Create a new tournament</a>
+        </li>
+    </ul>
 
     <table>
         <thead>
@@ -28,9 +33,4 @@
         </tbody>
     </table>
 
-    <ul>
-        <li>
-            <a href="{{ path('tournament_new') }}">Create a new tournament</a>
-        </li>
-    </ul>
 {% endblock %}

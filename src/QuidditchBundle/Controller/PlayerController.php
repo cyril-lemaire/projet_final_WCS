@@ -13,18 +13,22 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class PlayerController extends Controller
 {
-    /**
-     * Lists all player entities.
-     *
-     */
-    public function indexAction()
+	const ITEMS_PER_PAGE = 50;
+	/**
+	 * Lists all player entities.
+	 *
+	 * @param int $pageIndex
+	 * @return \Symfony\Component\HttpFoundation\Response
+	 */
+    public function indexAction($pageIndex)
     {
+    	$pageIndex = max(1, $pageIndex);
         $em = $this->getDoctrine()->getManager();
 
-        $players = $em->getRepository('QuidditchBundle:Player')->findAll();
-
+        $players = $em->getRepository('QuidditchBundle:Player')->findByPage($pageIndex);
         return $this->render('QuidditchBundle:player:index.html.twig', array(
             'players' => $players,
+			'page' => $pageIndex
         ));
     }
 

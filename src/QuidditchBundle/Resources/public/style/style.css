@@ -1,0 +1,36 @@
+.page-title {
+	text-align: center;
+}
+
+.tournament-bracket-table {
+	margin: 25px 25vw;
+	width: 50vw;
+}
+.tournament-bracket-table tr.bracket-title{
+	text-align: center;
+	color: red;
+	font-size: 3em;
+}
+.tournament-bracket-table:nth-child(odd),
+.tournament-bracket-table:nth-child(even) td.team{
+	background: lightgray;
+}
+.tournament-bracket-table:nth-child(even),
+.tournament-bracket-table:nth-child(odd) td.team{
+	background: darkgray;
+}
+.tournament-bracket-table td.versus{
+	color: red;
+	text-align: center;
+}
+.tournament-bracket-table td.winner{
+	background-color: gold;
+	color: darkred;
+	font-size: 1.2em;
+}
+.tournament-bracket-table td.tournament-champion{
+	text-align: center;
+	background-color: hotpink;
+	color: cyan;
+	font-size: 2em;
+}

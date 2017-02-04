@@ -82,12 +82,25 @@ class Player
 		return $this;
 	}
 
+	/**
+	 * Set name
+	 *
+	 * @param string $name
+	 *
+	 * @return Player
+	 */
+	public function setName($name)
+	{
+		$this->name = ucwords(strtolower($name));
+
+		return $this;
+	}
+
 	////////////////////
 	// GENERATED CODE //
 	////////////////////
-
-	/**
-     * @var int
+    /**
+     * @var integer
      */
     private $id;
 
@@ -97,43 +110,39 @@ class Player
     private $name;
 
     /**
-     * @var int
+     * @var integer
      */
     private $exp;
 
     /**
-     * @var int
+     * @var integer
      */
     private $age;
 
     /**
-     * @var int
+     * @var integer
      */
     private $exhaust;
+
+    /**
+     * @var \QuidditchBundle\Entity\Team
+     */
+    private $team;
+
+    /**
+     * @var \QuidditchBundle\Entity\Role
+     */
+    private $role;
 
 
     /**
      * Get id
      *
-     * @return int
+     * @return integer
      */
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set name
-     *
-     * @param string $name
-     *
-     * @return Player
-     */
-    public function setName($name)
-    {
-		$this->name = ucwords(strtolower($name));
-
-        return $this;
     }
 
     /**
@@ -163,7 +172,7 @@ class Player
     /**
      * Get exp
      *
-     * @return int
+     * @return integer
      */
     public function getExp()
     {
@@ -187,7 +196,7 @@ class Player
     /**
      * Get age
      *
-     * @return int
+     * @return integer
      */
     public function getAge()
     {
@@ -211,16 +220,12 @@ class Player
     /**
      * Get exhaust
      *
-     * @return int
+     * @return integer
      */
     public function getExhaust()
     {
         return $this->exhaust;
     }
-    /**
-     * @var \QuidditchBundle\Entity\Team
-     */
-    private $team;
 
     /**
      * Get team
@@ -231,11 +236,6 @@ class Player
     {
         return $this->team;
     }
-    /**
-     * @var \QuidditchBundle\Entity\Role
-     */
-    private $role;
-
 
     /**
      * Set role

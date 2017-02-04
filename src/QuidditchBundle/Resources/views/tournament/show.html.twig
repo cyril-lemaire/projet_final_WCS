@@ -1,54 +1,64 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Tournament</h1>
-    <h4><td>{% if tournament.date %}{{ tournament.date|date('Y-m-d H:i:s') }}{% endif %}</td></h4>
-    <table>
-        <tbody>
-            {% for b, bracket in brackets %}
+    <div class="page-title">
+        <h1>Tournament</h1>
+        <h4>{% if tournament.date %}{{ tournament.date|date('Y-m-d H:i:s') }}{% endif %}</h4>
+    </div>
+    {% for b, bracket in brackets %}
+        <table class="tournament-bracket-table">
+            <tbody>
+            <tr class="bracket-title">
+                <th colspan="10">
+                    <h2>
+                        {%  if loop.index < loop.length - 2%}
+                            Bracket {{ b + 1 }}
+                        {% elseif loop.index == loop.length - 2 %}
+                            Quarterfinals
+                        {% elseif loop.index == loop.length - 1 %}
+                            Semifinals
+                        {% elseif loop.index == loop.length %}
+                            Great Final
+                        {% endif %}
+                    </h2>
+                </th>
+            <tr>
+                <td colspan="10">
+                    <hr>
+                </td>
+            </tr>
+            {% for g, game in bracket %}
                 <tr>
-                    <th>
-                        <h2>
-                            {%  if loop.index < loop.length - 2%}
-                                Bracket {{ b + 1 }}
-                            {% elseif loop.index == loop.length - 2 %}
-                                Quarterfinals
-							{% elseif loop.index == loop.length - 1 %}
-                                Semifinals
-							{% elseif loop.index == loop.length %}
-                                Great Final
-                            {% endif %}
-                        </h2>
-                    </th>
+                    <td class="team">
+                        {{ game.teams[0] }}
+                    </td>
+                </tr>
                 <tr>
-                    <td colspan="5">
+                    <td class="versus">Vs</td>
+                    <td class="winner">Winner: <strong>{{ game.winner }}</strong></td>
+                </tr>
+                <tr>
+                    <td class="team">
+                        {{ game.teams[1] }}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="10">
                         <hr>
                     </td>
                 </tr>
-                {% for g, game in bracket %}
-                    <tr>
-                        <td>
-                            {{ game.teams[0] }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Vs</td>
-                        <td>Winner: <strong>{{ game.winner }}</strong></td>
-                    </tr>
-                    <tr>
-                        <td> {{ game.teams[1] }} </td>
-                    </tr>
-                    <tr>
-                        <td colspan="5">
-                            <hr>
-                        </td>
-                    </tr>
-                {% endfor %}
-        {% endfor %}
-        </tbody>
-    </table>
+            {% endfor %}
+            {% if loop.last %}
+            <tr>
+                <td colspan="10" class="tournament-champion">
+                    <h1>Champion:<br />{{ tournament.games|last.winner }} </h1>
+                </td>
+            </tr>
+            {% endif %}
+            </tbody>
+        </table>
+    {% endfor %}
 
-    <h1>Winner: {{ tournament.games|last.winner }} </h1>
 
     <ul>
         <li>

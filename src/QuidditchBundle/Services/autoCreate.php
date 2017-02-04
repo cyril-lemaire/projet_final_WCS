@@ -37,7 +37,7 @@ class autoCreate extends Controller
 	 * Creates a new player entity with random values (no form).
 	 *
 	 */
-	public function createTeam($randomUsers = null, &$roles = null) {
+	public function createTeam(&$randomUsers = null, $userFirstIndex, &$roles = null) {
 		$em = $this->getDoctrine()->getManager();
 		if (!$roles) {
 			$roles = $em->getRepository('QuidditchBundle:Role')->findAll();
@@ -48,9 +48,10 @@ class autoCreate extends Controller
 				$playersPerTeam += $role->getMaxPerTeam();
 			}
 			$randomUsers = json_decode(file_get_contents('https://randomuser.me/api/?results=' . ($playersPerTeam + 1)))->results;
+			$userFirstIndex = 0;
 		}
 		$i = 0;
-		$teamUser = $randomUsers[$i++];
+		$teamUser = $randomUsers[$userFirstIndex + $i++];
 		$teamName = $teamUser->login->username;
 		$teamCountry = $teamUser->location->state;
 		$team = new Team();
@@ -60,7 +61,7 @@ class autoCreate extends Controller
 		;
 		foreach ($roles as $role) {
 			for ($j = 0; $j < $role->getMaxPerTeam(); ++$j) {
-				$team->addPlayer($this->createPlayer($role, $randomUsers[$i++]));
+				$team->addPlayer($this->createPlayer($role, $randomUsers[$userFirstIndex + $i++]));
 			}
 		}
 
