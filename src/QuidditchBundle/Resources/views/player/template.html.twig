@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+{% block javascripts %}
+	{{ parent() }}
+	<script src="{{ asset('bundles/quidditch/javascript/namesGenerator.js') }}"></script>
+	<script>
+		$(document).ready(function(){
+			$('html').addClass('JQuery-Fonctionne!');
+			$('#generateName').click(function(){
+				generateName("input#quidditchbundle_player_name");
+			});
+		});
+	</script>
+{% endblock %}

@@ -39,6 +39,8 @@ class PlayerController extends Controller
     public function newAction(Request $request)
     {
         $player = new Player();
+		$randomUser = json_decode(file_get_contents("https://randomuser.me/api/"))->results[0];
+		$player->setName($randomUser->name->first . " " . $randomUser->name->last);
 		$form = $this->createForm('QuidditchBundle\Form\PlayerType', $player);
         $form->handleRequest($request);
 
