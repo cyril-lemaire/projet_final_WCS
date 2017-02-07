@@ -29,12 +29,15 @@ class TeamController extends Controller
 			$teamPlayers = $team->getPlayers($role);
 			for ($i = 0; $i < $role->getMaxPerTeam(); ++$i) {
 				$label = $role . ($role->getMaxPerTeam() > 1 ? ' ' . strval($i + 1) : '');
+				$choices = ['' => null];
+				$choices += $em->getRepository('QuidditchBundle:Player')->findByRole($role);
 				$form->add('player' . $playerIndex++, EntityType::class, array(
 					'label' => $label,
 					'class' => 'QuidditchBundle:Player',
-					'choices' => $em->getRepository('QuidditchBundle:Player')->findByRole($role),
+					'choices' =>  $choices,
 					'data' => $teamPlayers[$i],
 					'mapped' => false,
+					'required' => false,
 				));
 			}
 		}
@@ -55,12 +58,13 @@ class TeamController extends Controller
 		}
 		for ($i = 0; $i < $maxPlayersPerTeam; ++$i) {
 			$field = 'player' . $i;
-			$player = $form->get($field)->getData();
-			if (in_array($player, $players)) {
-				$form->addError(new FormError('You cannot add the player ' . $player . ' twice!'));
-				return false;
+			if ($player = $form->get($field)->getData()) {
+				if ($player && in_array($player, $players)) {
+					$form->addError(new FormError('You cannot add the player ' . $player . ' twice!'));
+					return false;
+				}
+				$players[] = $player;
 			}
-			$players[] = $player;
 		}
 		$form->getData()->setPlayers($players);
 		return true;

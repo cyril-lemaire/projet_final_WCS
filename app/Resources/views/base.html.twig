@@ -17,6 +17,11 @@
                 crossorigin="anonymous"></script>
             <!-- Compiled and minified JavaScript -->
             <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>
+            <script>
+                $(document).ready(function(){
+                	$('select').show(); // Override materialize's automatic select.hide()
+                });
+            </script>
         {% endblock %}
     </body>
 </html>

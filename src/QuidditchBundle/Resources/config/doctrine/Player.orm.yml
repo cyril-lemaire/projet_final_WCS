@@ -18,6 +18,10 @@ QuidditchBundle\Entity\Player:
             type: integer
         exhaust:
             type: integer
+        picture:
+            type: string
+            length: 255
+            nullable: true
     manyToOne:
         team:
             targetEntity: Team

@@ -2,6 +2,8 @@
 
 namespace QuidditchBundle\Entity;
 
+use Symfony\Component\HttpFoundation\File\File;
+
 /**
  * Player
  */
@@ -96,9 +98,64 @@ class Player
 		return $this;
 	}
 
+	/**
+	 * Set role
+	 *
+	 * @param \QuidditchBundle\Entity\Role $role
+	 *
+	 * @return Player
+	 */
+	public function setRole(\QuidditchBundle\Entity\Role $role = null)
+	{
+		$this->role = $role;
+		$this->setTeam($this->getTeam());
+
+		return $this;
+	}
+
+	public function getPictureFilename() {
+		return preg_replace('/.*\//', '', $this->picture);
+	}
+
+	/**
+	 * Upload and set picture
+	 *
+	 * @param File $file
+	 * @param string $uploadDir
+	 * @param string $assetDir
+	 *
+	 * @return Player $this
+	 */
+	public function uploadPicture(&$file, $uploadDir, $assetDir)
+	{
+		if(is_file($oldFile = $uploadDir . '/' . $this->getPictureFilename())) {
+			unlink($oldFile);
+		}
+		$filename = md5(uniqid()) . '.' . $file->guessExtension();
+		$file->move($uploadDir, $filename);
+		$this->picture = $assetDir . '/' . $filename;
+
+		return $this;
+	}
+
+	/**
+	 * Set picture
+	 *
+	 * @param string $path
+	 *
+	 * @return Player
+	 */
+	public function setPicture($path = null)
+	{
+		$this->picture = $path;
+
+		return $this;
+	}
+
 	////////////////////
 	// GENERATED CODE //
 	////////////////////
+
     /**
      * @var integer
      */
@@ -123,6 +180,11 @@ class Player
      * @var integer
      */
     private $exhaust;
+
+    /**
+     * @var string
+     */
+    private $picture;
 
     /**
      * @var \QuidditchBundle\Entity\Team
@@ -228,6 +290,16 @@ class Player
     }
 
     /**
+     * Get picture
+     *
+     * @return string
+     */
+    public function getPicture()
+    {
+        return $this->picture;
+    }
+
+    /**
      * Get team
      *
      * @return \QuidditchBundle\Entity\Team
@@ -235,20 +307,6 @@ class Player
     public function getTeam()
     {
         return $this->team;
-    }
-
-    /**
-     * Set role
-     *
-     * @param \QuidditchBundle\Entity\Role $role
-     *
-     * @return Player
-     */
-    public function setRole(\QuidditchBundle\Entity\Role $role = null)
-    {
-        $this->role = $role;
-
-        return $this;
     }
 
     /**
