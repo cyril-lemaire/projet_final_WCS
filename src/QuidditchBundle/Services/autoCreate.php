@@ -36,8 +36,12 @@ class autoCreate extends Controller
 	/**
 	 * Creates a new player entity with random values (no form).
 	 *
+	 * @param array(User) $randomUsers
+	 * @param int $userFirstIndex
+	 * @param array(Role) $roles
+	 * @return Team
 	 */
-	public function createTeam(&$randomUsers = null, $userFirstIndex, &$roles = null) {
+	public function createTeam(&$randomUsers = null, $userFirstIndex = 0, &$roles = null) {
 		$em = $this->getDoctrine()->getManager();
 		if (!$roles) {
 			$roles = $em->getRepository('QuidditchBundle:Role')->findAll();
@@ -54,6 +58,7 @@ class autoCreate extends Controller
 		$teamUser = $randomUsers[$userFirstIndex + $i++];
 		$teamName = $teamUser->login->username;
 		$teamCountry = $teamUser->location->state;
+
 		$team = new Team();
 		$team
 			->setName($teamName)

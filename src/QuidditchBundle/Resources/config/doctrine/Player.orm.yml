@@ -32,4 +32,11 @@ QuidditchBundle\Entity\Player:
                 name: role_id
                 referencedColumnName: id
                 nullable: false
+    oneToOne:
+        picture:
+            targetEntity: Picture
+            cascade: ['all']
+            joinColumn:
+                name: picture_id
+                referencedColumnName: id
     lifecycleCallbacks: {  }

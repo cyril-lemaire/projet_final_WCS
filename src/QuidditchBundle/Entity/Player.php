@@ -96,6 +96,21 @@ class Player
 		return $this;
 	}
 
+	/**
+	 * Set role
+	 *
+	 * @param \QuidditchBundle\Entity\Role $role
+	 *
+	 * @return Player
+	 */
+	public function setRole(\QuidditchBundle\Entity\Role $role = null)
+	{
+		$this->role = $role;
+		$this->setTeam($this->getTeam());
+
+		return $this;
+	}
+
 	////////////////////
 	// GENERATED CODE //
 	////////////////////
@@ -238,20 +253,6 @@ class Player
     }
 
     /**
-     * Set role
-     *
-     * @param \QuidditchBundle\Entity\Role $role
-     *
-     * @return Player
-     */
-    public function setRole(\QuidditchBundle\Entity\Role $role = null)
-    {
-        $this->role = $role;
-
-        return $this;
-    }
-
-    /**
      * Get role
      *
      * @return \QuidditchBundle\Entity\Role
@@ -259,5 +260,34 @@ class Player
     public function getRole()
     {
         return $this->role;
+    }
+    /**
+     * @var \QuidditchBundle\Entity\Picture
+     */
+    private $picture;
+
+
+    /**
+     * Set picture
+     *
+     * @param \QuidditchBundle\Entity\Picture $picture
+     *
+     * @return Player
+     */
+    public function setPicture(\QuidditchBundle\Entity\Picture $picture = null)
+    {
+        $this->picture = $picture;
+
+        return $this;
+    }
+
+    /**
+     * Get picture
+     *
+     * @return \QuidditchBundle\Entity\Picture
+     */
+    public function getPicture()
+    {
+        return $this->picture;
     }
 }

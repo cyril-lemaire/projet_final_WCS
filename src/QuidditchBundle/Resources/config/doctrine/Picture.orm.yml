@@ -1,0 +1,20 @@
+QuidditchBundle\Entity\Picture:
+    type: entity
+    table: null
+    repositoryClass: QuidditchBundle\Repository\PictureRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        path:
+            type: string
+            length: 255
+            nullable: true
+        alt:
+            type: string
+            length: 255
+            nullable: true
+    lifecycleCallbacks: {  }

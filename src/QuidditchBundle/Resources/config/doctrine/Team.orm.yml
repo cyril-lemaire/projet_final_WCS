@@ -15,7 +15,7 @@ QuidditchBundle\Entity\Team:
         country:
             type: string
             length: 255
-        dateFormation:
+        creationDate:
             type: datetime
     oneToMany:
         players:
@@ -30,4 +30,5 @@ QuidditchBundle\Entity\Team:
         playedGames:
           targetEntity: Game
           mappedBy: teams
-    lifecycleCallbacks: {  }
+    lifecycleCallbacks:
+        prePersist: [setCreationDateNow]

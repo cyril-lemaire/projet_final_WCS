@@ -3,6 +3,7 @@
 namespace QuidditchBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
  * Team
@@ -10,12 +11,24 @@ use Doctrine\Common\Collections\ArrayCollection;
 class Team
 {
 	/**
+	 * Set creationDate
+	 *
+	 * @param \DateTime $creationDate
+	 *
+	 * @return Team
+	 */
+	public function setCreationDateNow()
+	{
+		$this->creationDate = new \DateTime('now');
+
+		return $this;
+	}
+	/**
 	 * Constructor
 	 */
 	public function __construct()
 	{
 		$this->players = new \Doctrine\Common\Collections\ArrayCollection();
-		$this->dateFormation = new \DateTime('Now');
 	}
 
 	public function __toString()
@@ -32,12 +45,14 @@ class Team
 	 */
 	public function addPlayer(\QuidditchBundle\Entity\Player $player)
 	{
+		$count = 0;
 		if ($player->getTeam() == $this) {
 			echo "addPlayer: impossible operation, the player $player is already in the team $this!";
-		} elseif (($count = count($this->getPlayers($role = $player->getRole()))) < $role->getMaxPerTeam()) {
+		} elseif ($player->getRole() && (($count = count($this->getPlayers($player->getRole()))) < $player->getRole()->getMaxPerTeam())) {
 			$this->players[] = $player->_setTeamWithNoCheck($this);
 		} else {
-			echo "addPlayer: impossible operation, the player $player can't join the team $this because it already has $count $role" . 's!';
+			echo "addPlayer: impossible operation, the player $player can't join the team $this because it already has $count \"" . $player->getRole() . '\"!';
+			die;
 		}
 		return $this;
 	}
@@ -322,33 +337,33 @@ class Team
     {
         return $this->playedGames;
     }
+
     /**
      * @var \DateTime
-     */
-    private $dateFormation;
-
+	 */
+    private $creationDate;
 
     /**
-     * Set dateFormation
+     * Set creationDate
      *
-     * @param \DateTime $dateFormation
+     * @param \DateTime $creationDate
      *
      * @return Team
      */
-    public function setDateFormation($dateFormation)
+    public function setCreationDate($creationDate)
     {
-        $this->dateFormation = $dateFormation;
+        $this->creationDate = $creationDate;
 
         return $this;
     }
 
     /**
-     * Get dateFormation
+     * Get creationDate
      *
      * @return \DateTime
      */
-    public function getDateFormation()
+    public function getCreationDate()
     {
-        return $this->dateFormation;
+        return $this->creationDate;
     }
 }

@@ -5,6 +5,7 @@ namespace QuidditchBundle\Controller;
 use QuidditchBundle\Entity\Player;
 use QuidditchBundle\Entity\Role;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -45,12 +46,14 @@ class PlayerController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $player->setTeam($form->get('team')->getData());
-            $em->persist($player);
-            $em->flush();
+        	if ($player->getTeam() == $form->get('team')->getData()) {
+				$em = $this->getDoctrine()->getManager();
+				$em->persist($player);
+				$em->flush();
 
-            return $this->redirectToRoute('player_index');
+				return $this->redirectToRoute('player_index');
+			}
+			$form->get('team')->addError(new FormError(strval($player) . " couldn't be added to this team!"));
         }
 
         return $this->render('QuidditchBundle:player:new.html.twig', array(
