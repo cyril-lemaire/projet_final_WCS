@@ -7,6 +7,7 @@ use QuidditchBundle\Entity\Role;
 use QuidditchBundle\Entity\Team;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\File\File;
 
 class autoCreate extends Controller
 {
@@ -28,6 +29,7 @@ class autoCreate extends Controller
 		$player
 			->setRole($role)
 			->setName($randomUser->name->first . " " . $randomUser->name->last)
+			->setPicture($randomUser->picture->large);
 		;
 
 		return $player;

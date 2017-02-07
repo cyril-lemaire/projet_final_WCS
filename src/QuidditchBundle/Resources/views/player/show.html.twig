@@ -22,6 +22,16 @@
                 <td>{{ player.age }}</td>
             </tr>
             <tr>
+                <th>Picture</th>
+                <td>
+                    {% if player.picture %}
+                        <img src="{{ asset(player.picture) }}" alt="Picture of {{ player.name }}" width="200">
+                    {% else %}
+                        <p>No picture available for this player!</p>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
                 <th>Exhaust</th>
                 <td>{{ player.exhaust }}</td>
             </tr>

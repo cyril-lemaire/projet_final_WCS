@@ -47,6 +47,9 @@ class PlayerController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
         	if ($player->getTeam() == $form->get('team')->getData()) {
+        		if ($file = $form->get('file')->getData()) {
+					$player->uploadPicture($file, $this->getParameter('pictures_directory_absolute'), $this->getParameter('pictures_directory_asset'));
+				}
 				$em = $this->getDoctrine()->getManager();
 				$em->persist($player);
 				$em->flush();
@@ -87,6 +90,9 @@ class PlayerController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
+			if ($file = $editForm->get('file')->getData()) {
+				$player->uploadPicture($file, $this->getParameter('pictures_directory_absolute'), $this->getParameter('pictures_directory_asset'));
+			}
         	$em = $this->getDoctrine()->getManager();
 			$em->persist($player);
 			$em->flush();
@@ -111,9 +117,13 @@ class PlayerController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+			if (is_file($oldFile = $this->getParameter('pictures_directory_absolute') . '/' . $player->getPictureFilename())) {
+				unlink($oldFile);
+			}
+
             $em = $this->getDoctrine()->getManager();
             $em->remove($player);
-            $em->flush($player);
+            $em->flush();
         }
 
         return $this->redirectToRoute('player_index');

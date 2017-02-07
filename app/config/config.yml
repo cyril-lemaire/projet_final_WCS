@@ -8,6 +8,9 @@ imports:
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: en
+    pictures_directory: 'uploads/pictures'
+    pictures_directory_asset: 'bundles/quidditch/%pictures_directory%'
+    pictures_directory_absolute: '%kernel.root_dir%/../src/QuidditchBundle/Resources/public/%pictures_directory%'
 
 framework:
     #esi:             ~

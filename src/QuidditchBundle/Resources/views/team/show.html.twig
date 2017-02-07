@@ -20,7 +20,8 @@
 			{% for index, player in team.players %}
                 <tr>
                     <th>Player {{ index + 1 }}</th>
-                    <td>{{ player }}</td>
+                    <td>
+                        <a href="{{ path('player_show', { 'id': player.id }) }}">{{ player }}</a></td>
                 </tr>
             {% endfor %}
         </tbody>
