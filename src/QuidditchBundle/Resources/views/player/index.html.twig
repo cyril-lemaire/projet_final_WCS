@@ -1,22 +1,12 @@
 {% extends 'QuidditchBundle:player:template.html.twig' %}
 
 {% block body %}
-    <h1>
-		Players list
-		{% if page > 1 %}
-			(page {{ page }})
-		{% endif %}
-	</h1>
+    <h1>Players list</h1>
 
     <ul>
         <li>
             <a href="{{ path('player_new') }}" class="btn green">Create a new player</a>
         </li>
-		<li>
-			<a href="{{ path('player_index', {'pageIndex' : max(1, page - 1)}) }}" class="btn">Previous Page</a>
-			<a href="{{ path('player_index') }}" class="btn">First Page</a>
-			<a href="{{ path('player_index', {'pageIndex' : page + 1}) }}" class="btn">Next Page</a>
-		</li>
     </ul>
 
     <table>
@@ -33,47 +23,27 @@
                 <th>Actions</th>
             </tr>
         </thead>
-        <tbody>
-        {% for player in players %}
-            <tr>
-                <td><a href="{{ path('player_show', { 'id': player.id }) }}">{{ player.id }}</a></td>
-                <td>{{ player.name }}</td>
-                <td>{{ player.exp }}</td>
-                <td>{{ player.age }}</td>
-                <td>{{ player.exhaust }}</td>
-				<td>
-					{% if player.picture %}
-						<img src="{{ asset(player.picture) }}" alt="Picture of {{ player.name }}" width="200">
-					{% else %}
-						<p>No picture available for this player!</p>
-					{% endif %}
-				</td>
+        <tbody id="players-display">
 
-                <td>{{ player.team }}</td>
-                <td>{{ player.role }}</td>
-                <td>
-                    <ul>
-                        <li>
-                            <a href="{{ path('player_show', { 'id': player.id }) }}">show</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('player_edit', { 'id': player.id }) }}">edit</a>
-                        </li>
-                    </ul>
-                </td>
-            </tr>
-        {% endfor %}
         </tbody>
     </table>
+	<button id="load-more-players" class="btn">Load more</button>
 
 	<ul>
 		<li>
 			<a href="{{ path('player_new') }}" class="btn green">Create a new player</a>
 		</li>
-		<li>
-			<a href="{{ path('player_index', {'pageIndex' : max(1, page - 1)}) }}" class="btn">Previous Page</a>
-			<a href="{{ path('player_index') }}" class="btn">First Page</a>
-			<a href="{{ path('player_index', {'pageIndex' : page + 1}) }}" class="btn">Next Page</a>
-		</li>
 	</ul>
+{% endblock %}
+{% block javascripts %}
+	{{ parent() }}
+	<script>
+		$(document).ready(function(){
+			var i = 1;
+			displayPlayers(i++);
+			$('#load-more-players').on('click', function(){
+				displayPlayers(i++);
+			});
+		});
+	</script>
 {% endblock %}

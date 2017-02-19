@@ -8,7 +8,7 @@ class DefaultController extends Controller
 {
     public function indexAction()
     {
-        return $this->render('@ExamFinal/default/index.html.twig');
+        return $this->render('ExamFinalBundle:default:index.html.twig');
     }
 
     public function algoAction()
@@ -18,6 +18,6 @@ class DefaultController extends Controller
 
     public function sf2Action()
     {
-        return $this->render('@ExamFinal/SF2/index.html.twig');
+        return $this->render('ExamFinalBundle:SF2:index.html.twig');
     }
 }

@@ -1,3 +1,10 @@
+player_get_players_display:
+    path:     /display_players/{pageIndex}
+    defaults:
+        _controller: "QuidditchBundle:Player:getPlayersDisplay"
+        pageIndex: 1
+    methods:  [GET, POST]
+
 player_show:
     path:     /{id}/show
     defaults: { _controller: "QuidditchBundle:Player:show" }
@@ -19,8 +26,7 @@ player_delete:
     methods:  DELETE
 
 player_index:
-    path:     /{pageIndex}
+    path:     /
     defaults:
         _controller: "QuidditchBundle:Player:index"
-        pageIndex: 1
     methods:  GET

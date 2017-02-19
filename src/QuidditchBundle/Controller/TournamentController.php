@@ -54,20 +54,21 @@ class TournamentController extends Controller
 				$em = $this->getDoctrine()->getManager();
 
 				$roles = $em->getRepository('QuidditchBundle:Role')->findAll();
-				$playersPerTeam = 0;
+				$playersPerTeam = 0;	# Calculate the number of players per team
 				foreach ($roles as $role) {
 					$playersPerTeam += $role->getMaxPerTeam();
 				}
-				$nbPlayers = ($playersPerTeam + 1) * $tournament->getNbTeams();
-				$randomUsers = json_decode(file_get_contents('https://randomuser.me/api/?results=' . $nbPlayers))->results;
+				$nbUsers = ($playersPerTeam + 1) * $tournament->getNbTeams();	# There's also a user for the Team object
+				$randomUsers = json_decode(file_get_contents('https://randomuser.me/api/?results=' . $nbUsers))->results;
 
-				$bracket = [];
+				$bracket = [];	// List of team still in the run
 				for ($i = 0; $i < $tournament->getNbTeams(); ++$i) {
-					$bracket[] = $this->get('auto.create')->createTeam(
+					$team = $this->get('auto.create')->createTeam(
 						$randomUsers,
 						$i * ($playersPerTeam + 1),
 						$roles
 					);
+					$bracket[] = $team;
 				}
 				while (count($bracket) > 1) {
 					$prevBracket = $bracket;
@@ -75,7 +76,6 @@ class TournamentController extends Controller
 					for ($i = 0; $i < count($prevBracket) / 2; ++$i) {
 						$game = new Game($prevBracket[$i * 2], $prevBracket[($i * 2) + 1]);
 						$game->play();
-
 						$bracket[] = $game->getWinner();
 						$tournament->addGame($game);
 					}

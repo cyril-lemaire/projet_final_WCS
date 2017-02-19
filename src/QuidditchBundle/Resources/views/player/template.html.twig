@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+ {% extends 'base.html.twig' %}
 {% block javascripts %}
 	{{ parent() }}
 	<script src="{{ asset('bundles/quidditch/javascript/namesGenerator.js') }}"></script>
@@ -9,5 +9,13 @@
 				generateName("input#quidditchbundle_player_name");
 			});
 		});
+		function displayPlayers(pageIndex) {	{# Couldn't be declared in a separate file as it uses twig path function :/ #}
+			$.ajax({
+				url: '{{ path('player_get_players_display') }}/' + pageIndex,
+				success: function(data) {
+					$('#players-display').append(data);
+				}
+			});
+		}
 	</script>
 {% endblock %}

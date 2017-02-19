@@ -6,6 +6,7 @@ use QuidditchBundle\Entity\Player;
 use QuidditchBundle\Entity\Role;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -15,12 +16,49 @@ use Symfony\Component\HttpFoundation\Request;
 class PlayerController extends Controller
 {
 	const ITEMS_PER_PAGE = 50;
+
+	/**
+	 * Lists all player entities from a page.
+	 *
+	 * @param Request $request
+	 * @param int $pageIndex
+	 *
+	 * @return string
+	 */
+	public function getPlayersDisplayAction(Request $request, $pageIndex)
+	{
+		$pageIndex = max(1, $pageIndex);
+		$em = $this->getDoctrine()->getManager();
+		$players = $em->getRepository('QuidditchBundle:Player')->findByPage($pageIndex);
+
+		dump($players[0]);
+		foreach ($players as $i => $player) {
+			$players[$i]->setName(htmlspecialchars($player->getName()));
+		}
+		return $this->render('QuidditchBundle:player:playersDisplay.html.twig', array(
+			'players' => $players,
+		));
+	}
+
+	/**
+	 * Lists all player entities.
+	 *
+	 * @param int $pageIndex
+	 *
+	 * @return \Symfony\Component\HttpFoundation\Response
+	 */
+	public function indexAction()
+	{
+		return $this->render('QuidditchBundle:player:index.html.twig');
+	}
+
 	/**
 	 * Lists all player entities.
 	 *
 	 * @param int $pageIndex
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
+	/*
     public function indexAction($pageIndex)
     {
     	$pageIndex = max(1, $pageIndex);
@@ -32,7 +70,7 @@ class PlayerController extends Controller
 			'page' => $pageIndex
         ));
     }
-
+*/
     /**
      * Creates a new player entity.
      *

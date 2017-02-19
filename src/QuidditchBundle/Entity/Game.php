@@ -21,10 +21,14 @@ class Game
 	 * L’équipe la plus jeune voit sa note bonifiée de 10%
 	 * L’équipe qui a la note la plus haute gagne
 	 */
-	public function play() {
+	public function play(&$team1 = null, &$team2 = null) {
 		$score = [0, 0];
 		$youngestTeamIndex = $youngestTeamCreationDate = null;
-		$teams = $this->getTeams();
+		if ($team1 && $team2) {
+			$teams = [$team1, $team2];
+		} else {
+			$teams = $this->getTeams();
+		}
 		foreach ($teams as $i => $team) {
 			$score[$i] = floatval($team->getTotalExp() * $team->getAverageExhaust()) / (100 * count($team->getPlayers()));
 			if ($youngestTeamIndex == null || $team->getCreationDate() > $youngestTeamCreationDate) {
@@ -33,14 +37,13 @@ class Game
 			}
 		}
 		$score[$youngestTeamIndex] *= 1.1;
-		if ($score[0] == $score[1]) {
-			$this->setWinner($this->getTeams()[random_int(0, 1)]);
-		} else {
-			$this->setWinner($this->getTeams()[$score[1] > $score[0]]);
-		}
+		$winnerIndex = ($score[0] == $score[1]) ? random_int(0, 1) : $score[1] > $score[0];
+		$winner = $teams[$winnerIndex];
+		$loser = $teams[!$winnerIndex];
+		$this->setWinner($winner);
 		$this->setDate(new \DateTime('now'));
-		$this->getWinner()->gainExp(5, 10);
-		$this->getLoser()->gainExp(0, 5);
+		$winner->gainExp(5, 10);
+		$loser->gainExp(0, 5);
 		foreach ($this->getTeams() as $team) {
 			$team->addExhaust(1, 10);
 		}
