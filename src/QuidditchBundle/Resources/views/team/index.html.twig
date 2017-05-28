@@ -23,27 +23,35 @@
                 <th>Actions</th>
             </tr>
         </thead>
-        <tbody>
-        {% for team in teams %}
-            <tr>
-                <td><a href="{{ path('team_show', { 'id': team.id }) }}">{{ team.id }}</a></td>
-                <td>{{ team.name }}</td>
-                <td>{{ team.country }}</td>
-                <td>{{ team.totalExp }}</td>
-                <td>{{ team.averageExhaust }}</td>
-                <td>
-                    <ul>
-                        <li>
-                            <a href="{{ path('team_show', { 'id': team.id }) }}">show</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('team_edit', { 'id': team.id }) }}">edit</a>
-                        </li>
-                    </ul>
-                </td>
-            </tr>
-        {% endfor %}
+        <tbody id="teams-display">
+            {# Teams come here! (through teamsDisplay.js) #}
         </tbody>
     </table>
+	<button id="load-more-teams" class="btn">Load more</button>
+
+
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+		{#	Couldn't be declared in a separate js file as it uses twig path function :/
+			Maybe should I put a .js.twig in the public/javascript, but that seems ugly
+		#}
+		function displayTeams(pageIndex) {
+			$.ajax({
+				url: '{{ path('teams_display') }}/' + pageIndex,
+				success: function(data) {
+					$('#teams-display').append(data);
+				}
+			});
+		}
+		$(document).ready(function(){
+			var i = 1;
+			displayTeams(i++);
+			$('#load-more-teams').click(function(){
+				displayTeams(i++);
+			});
+		});
+    </script>
 
 {% endblock %}

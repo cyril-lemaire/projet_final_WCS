@@ -1,3 +1,10 @@
+teams_display:
+    path:     /display_teams/{pageIndex}
+    defaults:
+        _controller: "QuidditchBundle:Team:teamsDisplay"
+        pageIndex: 1
+    methods:  [GET, POST]
+
 team_autocreate:
     path:     /autocreate
     defaults: { _controller: "QuidditchBundle:Team:autocreate" }

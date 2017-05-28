@@ -15,23 +15,22 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class PlayerController extends Controller
 {
-	const ITEMS_PER_PAGE = 50;
+	const ITEMS_PER_PAGE = 50;	// Number of players displayed dynamically
 
 	/**
-	 * Lists all player entities from a page.
+	 * Lists all Player entities from a page.
 	 *
 	 * @param Request $request
 	 * @param int $pageIndex
 	 *
 	 * @return string
 	 */
-	public function getPlayersDisplayAction(Request $request, $pageIndex)
+	public function playersDisplayAction(Request $request, $pageIndex)
 	{
 		$pageIndex = max(1, $pageIndex);
 		$em = $this->getDoctrine()->getManager();
 		$players = $em->getRepository('QuidditchBundle:Player')->findByPage($pageIndex);
 
-		dump($players[0]);
 		foreach ($players as $i => $player) {
 			$players[$i]->setName(htmlspecialchars($player->getName()));
 		}
@@ -43,8 +42,6 @@ class PlayerController extends Controller
 	/**
 	 * Lists all player entities.
 	 *
-	 * @param int $pageIndex
-	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
 	public function indexAction()
@@ -53,24 +50,23 @@ class PlayerController extends Controller
 	}
 
 	/**
-	 * Lists all player entities.
+	 * Lists all player entities. (obsolete, replaced by dynamic loading)
 	 *
 	 * @param int $pageIndex
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-	/*
-    public function indexAction($pageIndex)
-    {
-    	$pageIndex = max(1, $pageIndex);
-        $em = $this->getDoctrine()->getManager();
+//    public function indexAction($pageIndex)
+//    {
+//    	$pageIndex = max(1, $pageIndex);
+//        $em = $this->getDoctrine()->getManager();
+//
+//        $players = $em->getRepository('QuidditchBundle:Player')->findByPage($pageIndex);
+//        return $this->render('QuidditchBundle:player:index.html.twig', array(
+//            'players' => $players,
+//			'page' => $pageIndex
+//        ));
+//    }
 
-        $players = $em->getRepository('QuidditchBundle:Player')->findByPage($pageIndex);
-        return $this->render('QuidditchBundle:player:index.html.twig', array(
-            'players' => $players,
-			'page' => $pageIndex
-        ));
-    }
-*/
     /**
      * Creates a new player entity.
      *

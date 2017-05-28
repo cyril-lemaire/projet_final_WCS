@@ -24,7 +24,7 @@
             </tr>
         </thead>
         <tbody id="players-display">
-
+			{# Players come here! (through displayPlayers) #}
         </tbody>
     </table>
 	<button id="load-more-players" class="btn">Load more</button>
@@ -38,10 +38,21 @@
 {% block javascripts %}
 	{{ parent() }}
 	<script>
+		{#	Couldn't be declared in a separate js file as it uses twig path function :/
+			Maybe should I put a .js.twig in the public/javascript, but that seems ugly
+		#}
+		function displayPlayers(pageIndex) {
+			$.ajax({
+				url: '{{ path('players_display') }}/' + pageIndex,
+				success: function(data) {
+					$('#players-display').append(data);
+				}
+			});
+		}
 		$(document).ready(function(){
 			var i = 1;
 			displayPlayers(i++);
-			$('#load-more-players').on('click', function(){
+			$('#load-more-players').click(function(){
 				displayPlayers(i++);
 			});
 		});

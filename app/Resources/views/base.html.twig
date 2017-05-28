@@ -11,10 +11,12 @@
     <body>
         {% block body %}{% endblock %}
         {% block javascripts %}
-            <script
-                src="http://code.jquery.com/jquery-3.1.1.min.js"
-                integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
-                crossorigin="anonymous"></script>
+            <script src="{{ asset('bundles/quidditch/javascript/jquery.min.js') }}" />
+            {# That'd be cool to load the cdn by default and the local version if it couldn't load#}
+            {#<script#}
+                {#src="http://code.jquery.com/jquery-3.1.1.min.js"#}
+                {#integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="#}
+                {#crossorigin="anonymous"></script>#}
             <!-- Compiled and minified JavaScript -->
             <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>
             <script>

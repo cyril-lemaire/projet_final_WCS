@@ -15,6 +15,8 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class TeamController extends Controller
 {
+	const ITEMS_PER_PAGE = 50;	// Number of teams displayed dynamically
+
 	/**
 	 * Generates a complete TeamForm for a Team (gathers all possible Players for each Role and defaults to the current's Team Players)
 	 * @param Team $team
@@ -70,20 +72,48 @@ class TeamController extends Controller
 		return true;
 	}
 
+	/**
+	 * Lists all player entities from a page.
+	 *
+	 * @param Request $request
+	 * @param int $pageIndex
+	 *
+	 * @return string
+	 */
+	public function teamsDisplayAction(Request $request, $pageIndex)
+	{
+		$pageIndex = max(1, $pageIndex);
+		$em = $this->getDoctrine()->getManager();
+		$teams = $em->getRepository('QuidditchBundle:Team')->findByPage($pageIndex);
+		return $this->render('QuidditchBundle:team:teamsDisplay.html.twig', array(
+			'teams' => $teams,
+		));
+	}
+
+	/**
+	 * Lists all team entities.
+	 *
+	 * @return \Symfony\Component\HttpFoundation\Response
+	 */
+	public function indexAction()
+	{
+		return $this->render('QuidditchBundle:team:index.html.twig');
+	}
+
     /**
-     * Lists all team entities.
+     * Lists all team entities. (obsolete, replaced by dynamic loading)
      *
      */
-    public function indexAction()
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $teams = $em->getRepository('QuidditchBundle:Team')->findAll();
-
-        return $this->render('QuidditchBundle:team:index.html.twig', array(
-            'teams' => $teams,
-        ));
-    }
+//    public function indexAction()
+//    {
+//        $em = $this->getDoctrine()->getManager();
+//
+//        $teams = $em->getRepository('QuidditchBundle:Team')->findAll();
+//
+//        return $this->render('QuidditchBundle:team:index.html.twig', array(
+//            'teams' => $teams,
+//        ));
+//    }
 
     /**
      * Creates a new team entity.

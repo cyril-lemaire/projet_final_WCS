@@ -2,6 +2,8 @@
 
 namespace QuidditchBundle\Repository;
 
+use QuidditchBundle\Controller\TeamController;
+
 /**
  * TeamRepository
  *
@@ -10,4 +12,11 @@ namespace QuidditchBundle\Repository;
  */
 class TeamRepository extends \Doctrine\ORM\EntityRepository
 {
+	public function findByPage($page) {
+		$qb = $this->createQueryBuilder('p')
+			->setFirstResult(max(0, $page - 1) * TeamController::ITEMS_PER_PAGE)
+			->setMaxResults(TeamController::ITEMS_PER_PAGE)
+		;
+		return $qb->getQuery()->getResult();
+	}
 }

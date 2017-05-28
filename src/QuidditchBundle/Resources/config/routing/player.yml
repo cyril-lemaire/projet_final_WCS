@@ -1,7 +1,7 @@
-player_get_players_display:
+players_display:
     path:     /display_players/{pageIndex}
     defaults:
-        _controller: "QuidditchBundle:Player:getPlayersDisplay"
+        _controller: "QuidditchBundle:Player:playersDisplay"
         pageIndex: 1
     methods:  [GET, POST]
 
